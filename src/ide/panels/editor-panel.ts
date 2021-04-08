@@ -1,3 +1,4 @@
+
 import Vue from 'vue';
 import Component from 'vue-class-component';
 
@@ -23,8 +24,8 @@ class EditorPanel extends Vue {
         });
     }    
 
-    async open(url: string) {
-        var r = await fetch(url);
+    async open(uri: string | File) {
+        var r = typeof uri === 'string' ? await fetch(uri) : uri;
         this.editor.swapDoc(new CodeMirror.Doc(await r.text(), 'text/x-c'));
     }
 

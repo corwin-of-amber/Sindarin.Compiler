@@ -18,6 +18,8 @@ class AstPanel extends Vue {
     
     focused: Ast
 
+    generation: number
+
     render(createElement) {
         return createElement(treeview, {children: []});
     }
@@ -29,6 +31,7 @@ class AstPanel extends Vue {
 
     show(ast: Ast, doc?: CodeMirror.Doc) {
         this.ast = this.focused = ast;
+        this.generation = doc.changeGeneration();
         function aux(ast: Ast) {
             if (Array.isArray(ast))
                 return {root: {_component: 'term-inner', type: ast.type,
@@ -43,6 +46,7 @@ class AstPanel extends Vue {
                 {doc, line: token.line, col: token.col + token.text.length}));
         }
         this.tree.$props.children.splice(0, Infinity, aux(ast));
+        this.$emit('change');
     }
 
     parse(doc: CodeMirror.Doc, parser: Parser) {

@@ -16,6 +16,8 @@ class IDE {
     vue: Vue
     panels: {editor: EditorPanel, ast: AstPanel, peg: PegPanel}
 
+    parser: Parser
+
     constructor() {
         this.vue = new Vue(ide);
         this.vue.$props.panels = [
@@ -23,7 +25,9 @@ class IDE {
             {id: 'ast', _component: 'ide-panel-ast'},
             {id: 'peg', _component: 'ide-panel-peg'}
         ];
+        this.vue.$props.messages = [];
         this.vue.$mount(document.querySelector('#ide'));
+        this.vue.$on('file-open', (fl: File) => this.open(fl));
         this.panels = {
             editor: this.vue.$refs.editor[0],
             ast: this.vue.$refs.ast[0],
@@ -34,13 +38,42 @@ class IDE {
         });
     }
 
-    async open(url: string) {
-        return this.panels.editor.open(url);
+    async open(uri: string | File) {
+        await this.panels.editor.open(uri);
+        this.panels.ast.generation = undefined;
+        if (this.parser) this.reparse();
     }
 
-    parse(parser: Parser) {
+    parse(parser: Parser = this.parser) {
+        this.reportClear();
+        this.parser = parser;
         var doc = this.panels.editor.editor.getDoc();
-        this.panels.ast.parse(doc, parser);
+        try {
+            this.panels.ast.parse(doc, parser);
+        }
+        catch (e) {
+            this.report('' + e, 'error');
+            throw e;
+        }
+    }
+
+    /**
+     * Runs `parse` again only if the document was changed.
+     */
+    reparse(parser: Parser = this.parser) {
+        if (this.panels.ast.generation !== undefined) {
+            var doc = this.panels.editor.editor.getDoc();
+            if (doc.isClean(this.panels.ast.generation)) return;
+        }
+        this.parse(parser);
+    }
+
+    reportClear() {
+        this.vue.$props.messages = [];
+    }
+
+    report(text: string, kind = 'info') {
+        this.vue.$props.messages.push({text, kind});
     }
 
 }

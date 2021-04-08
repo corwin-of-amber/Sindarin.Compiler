@@ -154,7 +154,6 @@ function main() {
         if (program.entry)
             setTimeout(() => nav.gotoMethod(program.entry), 0); /** @oops can only run after PegPanel 'show' event */
 
-        ide.parse(parser);
         var semanticAnalysis = tool.seman;
 
         //ide.panels.ast.hide();
@@ -163,11 +162,17 @@ function main() {
             nav: SourceNavigator;
 
         function syntax() {
+            try { ide.reparse(parser); } catch { return; }
+        }
+
+        ide.panels.ast.$on('change', () => {
             peg1 = new Hypergraph().fromAst(ide.panels.ast.focused);
             peg2 = undefined;
             ide.panels.peg.show(peg1);
+            ide.panels.peg.view.network.once('stabilized', () =>
+                ide.panels.peg.view.untangle());
             Object.assign(window, {peg1, m: new HMatcher(peg1), H: HMatcher});
-        }
+        });
 
         function semantics() {
             if (!peg2) {

@@ -3,7 +3,8 @@
     "version": "0.1.0",
     "main": "dist/index.html",
     "scripts": {
-        "build": "parcel build --no-minify src/index.html",
+        "build": "parcel build --no-minify --public-url=. src/index.html",
+        "build:prod": "rm -rf dist && parcel build --no-minify --no-source-maps --public-url=. src/index.html && cp -r data dist/",
         "watch": "parcel watch --public-url=. --hmr-hostname=localhost src/index.html",
         "start": "nw&",
         "start:dev": "concurrently 'npm run watch' 'npm start'",
@@ -23,8 +24,9 @@
         "@types/codemirror": "0.0.91",
         "@types/node": "^13.13.4",
         "@vue/component-compiler-utils": "^3.1.2",
+        "cssnano": "^4.1.11",
         "nw-vue-devtools-prebuilt": "0.0.10",
-        "typescript": "^3.8.3",
+        "typescript": "^3.9.9",
         "vue-hot-reload-api": "^2.3.4",
         "vue-template-compiler": "^2.6.11"
     },
