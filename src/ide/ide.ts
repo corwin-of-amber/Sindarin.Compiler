@@ -36,6 +36,7 @@ class IDE {
         this.panels.ast.$on('action:peg', (ev: {ast: Ast}) => {
             this.panels.peg.show(new Hypergraph().fromAst(ev.ast));
         });
+        this.setupGlobalKeys();
     }
 
     async open(uri: string | File) {
@@ -76,6 +77,15 @@ class IDE {
         this.vue.$props.messages.push({text, kind});
     }
 
+    setupGlobalKeys() {
+        document.addEventListener( 'keydown', (ev) => {
+            if ((ev.key == "Enter" || ev.key == "s")
+                 && (ev.ctrlKey || ev.metaKey)) {
+                ev.stopPropagation(); ev.preventDefault();
+                try { this.reparse(); } catch { }
+            }
+        }, {capture: true})
+    }
 }
 
 interface Parser {

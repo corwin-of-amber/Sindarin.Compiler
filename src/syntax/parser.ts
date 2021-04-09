@@ -1,3 +1,4 @@
+import assert from 'assert';
 import moo from 'moo';
 import nearley from 'nearley';
 
@@ -54,7 +55,12 @@ class Parser extends nearley.Parser {
     parse(program: string) {
         this.restart();
         this.feed(program);
-        return this.finish();
+        var parseRes = this.finish();
+        if (Array.isArray(parseRes)) {
+            /**/ assert(parseRes.length == 1) /**/
+            return parseRes[0];
+        }
+        else return parseRes;
     }
 
     restart() { this.restore(this.initial); }

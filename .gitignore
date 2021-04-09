@@ -2,6 +2,7 @@
 .cache
 .parcel-cache
 /dist
+/public
 /build
 node_modules
 *.app

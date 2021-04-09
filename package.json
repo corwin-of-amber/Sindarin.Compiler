@@ -4,10 +4,11 @@
     "main": "dist/index.html",
     "scripts": {
         "build": "parcel build --no-minify --public-url=. src/index.html",
-        "build:prod": "rm -rf dist && parcel build --no-minify --no-source-maps --public-url=. src/index.html && cp -r data dist/",
+        "build:prod": "rm -rf public && parcel build --out-dir public --no-minify --no-source-maps --public-url=. src/index.html && cp -r data public/",
         "watch": "parcel watch --public-url=. --hmr-hostname=localhost src/index.html",
         "start": "nw&",
         "start:dev": "concurrently 'npm run watch' 'npm start'",
+        "deploy": "npm run build:prod && vercel --prod",
         "qa:build-mujs": "kremlin data/typescript/net-server.ts && babel build/kremlin/net-server.js > build/kremlin/net-server.mu.js"
     },
     "dependencies": {
