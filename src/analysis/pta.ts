@@ -217,7 +217,7 @@ class AndersenAnalyis<VData> implements PointsToAnalysis<VData> {
             vertexLabelPat: "this",
             labelPred: LINK_TYPES.FIELD,
             through: "outgoing",
-          }, // Find defining instace
+          }, // Find defining instance
           { labelPred: LINK_TYPES.SOLVED, through: "outgoing" }, // Find class declaration
           { labelPred: LINK_TYPES.CLASS, through: "incoming" }, // Find relevant method declaration
           { labelPred: LINK_TYPES.RETURN_VALUE, through: "incoming" }, // Get return value
