@@ -1,9 +1,7 @@
-import { Hypergraph } from "./hypergraph";
-import { HMatcher } from "./pattern";
-import * as Syntax from "./syntax";
-import { getClosestScopeNameRouteDefinition } from "./semantics";
-import assert from "assert";
-import { lazyFilter, toSubtreeString } from "./utils";
+import { Hypergraph } from "analysis/hypergraph";
+import { HMatcher } from "analysis/pattern";
+import { getClosestScopeNameRouteDefinition } from "analysis/semantics";
+import { lazyFilter, toSubtreeString } from "analysis/utils";
 
 const ASSIGNMENT_EXPRESSIONS: SyntaxToken[] = [
   "VariableDeclaration",
@@ -29,7 +27,7 @@ const SUPPORTED_ASSIGNMENT_EXPRESSIONS = new Set(
   ASSIGNMENT_EXPRESSIONS.slice(0, 3)
 );
 
-export function performPointsToAnalysis<VData>(
+export function pointsToAnalysis<VData>(
   sourcePeg: Hypergraph<VData>
 ): Hypergraph<VData> {
   const m = new HMatcher(sourcePeg);
@@ -51,7 +49,9 @@ export function performPointsToAnalysis<VData>(
 
   // 2) Filter supported expressions
   const supportedAssignments = assignments.filter((expr) => {
-    return SUPPORTED_ASSIGNMENT_EXPRESSIONS.has(expr.assignmentExpr.label);
+    return SUPPORTED_ASSIGNMENT_EXPRESSIONS.has(
+      expr.assignmentExpr.label as SyntaxToken
+    );
   });
 
   // 3) Add to Andersen graph
@@ -132,7 +132,7 @@ class AndersenAnalyis<VData> implements PointsToAnalysis<VData> {
           return;
         }
 
-        // fallthrough
+        /* falls through */
       }
       case "BinaryExpression": {
         const [left, op, right] = _parseBinaryExpression(assignmentExpr, false);
@@ -192,9 +192,9 @@ class AndersenAnalyis<VData> implements PointsToAnalysis<VData> {
       {
         firstOnly: true,
         definitions: [
-          { vertexLabelPat: "this" },
+          { vertexLabelPat: "this" as LabelPat },
           {
-            labelPred: LINK_TYPES.CLASS,
+            labelPred: LINK_TYPES.CLASS as LabelPat,
             through: "outgoing",
             modifier: "rtc",
           },
@@ -211,16 +211,19 @@ class AndersenAnalyis<VData> implements PointsToAnalysis<VData> {
     ptaMatcher.resolvePatternDefinitions(
       {
         definitions: [
-          { labelPred: LINK_TYPES.INVOCATION, resolve: "targets" }, // Find vertices assigned by invocations
-          { labelPred: LINK_TYPES.INVOCATION, through: "incoming" }, // Find incoming invocations
+          { labelPred: LINK_TYPES.INVOCATION as LabelPat, resolve: "targets" }, // Find vertices assigned by invocations
+          { labelPred: LINK_TYPES.INVOCATION as LabelPat, through: "incoming" }, // Find incoming invocations
           {
-            vertexLabelPat: "this",
-            labelPred: LINK_TYPES.FIELD,
+            vertexLabelPat: "this" as LabelPat,
+            labelPred: LINK_TYPES.FIELD as LabelPat,
             through: "outgoing",
-          }, // Find defining instance
-          { labelPred: LINK_TYPES.SOLVED, through: "outgoing" }, // Find class declaration
-          { labelPred: LINK_TYPES.CLASS, through: "incoming" }, // Find relevant method declaration
-          { labelPred: LINK_TYPES.RETURN_VALUE, through: "incoming" }, // Get return value
+          }, // Find defining instace
+          { labelPred: LINK_TYPES.SOLVED as LabelPat, through: "outgoing" }, // Find class declaration
+          { labelPred: LINK_TYPES.CLASS as LabelPat, through: "incoming" }, // Find relevant method declaration
+          {
+            labelPred: LINK_TYPES.RETURN_VALUE as LabelPat,
+            through: "incoming",
+          }, // Get return value
         ],
       },
       (route) => {
@@ -248,9 +251,23 @@ class AndersenAnalyis<VData> implements PointsToAnalysis<VData> {
         {
           unreflexive: true,
           definitions: [
-            { labelPred: LINK_TYPES.SOLVED, resolve: "sources" },
-            { labelPred: LINK_TYPES.SOLVED, through: "outgoing" },
-            { labelPred: LINK_TYPES.ASSIGNMENT, through: "outgoing" },
+            {
+              labelPred: [
+                LINK_TYPES.SOLVED as TypeScriptSyntaxToken,
+                LINK_TYPES.ASSIGNMENT as TypeScriptSyntaxToken,
+              ],
+            },
+            {
+              labelPred: [
+                LINK_TYPES.SOLVED as TypeScriptSyntaxToken,
+                LINK_TYPES.ASSIGNMENT as TypeScriptSyntaxToken,
+              ],
+              through: "outgoing",
+            },
+            {
+              labelPred: LINK_TYPES.ASSIGNMENT as LabelPat,
+              through: "outgoing",
+            },
           ],
         },
         ([src, _, target]) => {
@@ -275,7 +292,7 @@ class AndersenAnalyis<VData> implements PointsToAnalysis<VData> {
       right
     ) as Hypergraph.Vertex[];
 
-    assert(leftExpressions.length === rightExpressions.length);
+    console.assert(leftExpressions.length === rightExpressions.length);
 
     const fakeEquals = new Hypergraph.Vertex<VData>(null);
     fakeEquals.label = "=";
@@ -301,7 +318,7 @@ class AndersenAnalyis<VData> implements PointsToAnalysis<VData> {
     const readConstraint = this._resolveConstraint(right, scopeVertex);
     const writeConstraint = this._resolveConstraint(left, scopeVertex);
 
-    assert(!writeConstraint.type);
+    console.assert(!writeConstraint.type);
 
     // Connect read and write
     const linkType = readConstraint.type || LINK_TYPES.ASSIGNMENT;
@@ -334,7 +351,7 @@ class AndersenAnalyis<VData> implements PointsToAnalysis<VData> {
     const { label, outgoing } = vertex;
     const scopeVertex = this._getVertexByLabel(label);
 
-    assert(outgoing.length === 1);
+    console.assert(outgoing.length === 1);
 
     const parentScopeDefinitions = getClosestScopeNameRouteDefinition({
       vertex,
@@ -344,7 +361,7 @@ class AndersenAnalyis<VData> implements PointsToAnalysis<VData> {
     );
 
     if (parentScopeMatches.length) {
-      assert(parentScopeMatches.length === 1);
+      console.assert(parentScopeMatches.length === 1);
 
       const [[_, parentScope]] = parentScopeMatches;
       const parentScopeVertex = this._resolveScope(parentScope);
@@ -385,7 +402,7 @@ class AndersenAnalyis<VData> implements PointsToAnalysis<VData> {
         const properties = _parseObjectLiteralVertex(edge);
 
         // TODO: work this out (since there are more reads)
-        assert(properties.length === 0);
+        console.assert(properties.length === 0);
 
         // TODO: args!
         return this._createNewMemoryLocation(Object.name, scope);
@@ -403,9 +420,9 @@ class AndersenAnalyis<VData> implements PointsToAnalysis<VData> {
           type: propType,
         } = this._resolveConstraint(prop, scope);
 
-        assert(!baseType);
-        assert(!propType);
-        assert(!propTop);
+        console.assert(!baseType);
+        console.assert(!propType);
+        console.assert(!propTop);
 
         // TODO: add field link
         this._link(LINK_TYPES.FIELD, propBottom, baseBottom);
@@ -418,7 +435,7 @@ class AndersenAnalyis<VData> implements PointsToAnalysis<VData> {
 
         // TODO: deal with args
 
-        assert(!type);
+        console.assert(!type);
 
         return { bottom, top, type: LINK_TYPES.INVOCATION };
       }
@@ -436,7 +453,7 @@ class AndersenAnalyis<VData> implements PointsToAnalysis<VData> {
         const [left, op, right] = _parseBinaryExpression(edge);
 
         // TODO: support multiple reads
-        assert(op === "=");
+        console.assert(op === "=");
 
         const vertex = this._resolveWriteConstraint(scope, left, right);
         return { top: null, bottom: vertex };
@@ -467,13 +484,13 @@ class AndersenAnalyis<VData> implements PointsToAnalysis<VData> {
         return !scope;
       }
 
-      assert(scopeEdges.length === 1);
+      console.assert(scopeEdges.length === 1);
 
       const existingScope = scopeEdges[0].target;
       return scope === existingScope;
     });
 
-    assert(relevantVertices.length <= 1);
+    console.assert(relevantVertices.length <= 1);
 
     return relevantVertices[0] || this.peg._fresh(label);
   }
@@ -524,25 +541,25 @@ function _isArrayLiteralVertex(vertex: Vertex): boolean {
 }
 
 function _parseArrayLiteralVertex(vertex: Vertex): Vertex[] {
-  assert(_isArrayLiteralVertex(vertex));
+  console.assert(_isArrayLiteralVertex(vertex));
 
   // TODO: with pattern syntax
   const [edge] = vertex.incoming;
-  assert(edge.sources.length === 3);
+  console.assert(edge.sources.length === 3);
 
   const [lparan, syntaxList, rparan] = edge.sources;
-  assert(lparan.label === "[");
-  assert(rparan.label === "]");
+  console.assert(lparan.label === "[");
+  console.assert(rparan.label === "]");
 
   return _parseSyntaxList(syntaxList);
 }
 
 function _parseObjectLiteralVertex(edge: Edge): Vertex[] {
-  assert(edge.label === "ObjectLiteralExpression");
+  console.assert(edge.label === "ObjectLiteralExpression");
 
   const [lparan, syntaxList, rparan] = edge.sources;
-  assert(lparan.label === "{");
-  assert(rparan.label === "}");
+  console.assert(lparan.label === "{");
+  console.assert(rparan.label === "}");
 
   // TODO: this may be completely wrong (try with actual properties)
   return _parseSyntaxList(syntaxList);
@@ -550,19 +567,20 @@ function _parseObjectLiteralVertex(edge: Edge): Vertex[] {
 
 function _parseSyntaxList(vertex: Vertex): Vertex[] {
   const [edge, label] = getEdgeAndLabel(vertex);
-  assert(label === "SyntaxList");
+  console.assert(label === "SyntaxList");
 
   return edge.sources.filter((_) => _.label !== ",");
 }
 
-function _parsePropertyAccessExpression(
-  edge: Edge
-): { base: Vertex; prop: Vertex } {
-  assert(edge.label === "PropertyAccessExpression");
-  assert(edge.sources.length === 3);
+function _parsePropertyAccessExpression(edge: Edge): {
+  base: Vertex;
+  prop: Vertex;
+} {
+  console.assert(edge.label === "PropertyAccessExpression");
+  console.assert(edge.sources.length === 3);
 
   const [base, dot, prop] = edge.sources;
-  assert(dot.label === ".");
+  console.assert(dot.label === ".");
 
   return {
     base,
@@ -571,13 +589,13 @@ function _parsePropertyAccessExpression(
 }
 
 function _parseCallExpression(edge: Edge): { caller: Vertex; args: Vertex[] } {
-  assert(edge.label === "CallExpression");
-  assert(edge.sources.length === 4);
+  console.assert(edge.label === "CallExpression");
+  console.assert(edge.sources.length === 4);
 
   const [caller, lparan, args, rparan] = edge.sources;
 
-  assert(lparan.label === "(");
-  assert(rparan.label === ")");
+  console.assert(lparan.label === "(");
+  console.assert(rparan.label === ")");
 
   return {
     caller,
@@ -586,13 +604,13 @@ function _parseCallExpression(edge: Edge): { caller: Vertex; args: Vertex[] } {
 }
 
 function _parseNewExpression(edge: Edge): { type: Vertex } {
-  assert(edge.label === "NewExpression");
-  assert(edge.sources.length === 2);
+  console.assert(edge.label === "NewExpression");
+  console.assert(edge.sources.length === 2);
 
   // TODO: what about args?
   const [newKeyword, type] = edge.sources;
 
-  assert(newKeyword.label === "new");
+  console.assert(newKeyword.label === "new");
 
   // TODO: include defining file etc
   return {
@@ -601,12 +619,12 @@ function _parseNewExpression(edge: Edge): { type: Vertex } {
 }
 
 function _parseReturnStatement(edge: Edge): Vertex {
-  assert(edge.label === "ReturnStatement");
-  assert(edge.sources.length >= 2);
+  console.assert(edge.label === "ReturnStatement");
+  console.assert(edge.sources.length >= 2);
 
   const [returnKeyword, ...rest] = edge.sources;
 
-  assert(returnKeyword.label === "return");
+  console.assert(returnKeyword.label === "return");
 
   // Get rid of semicolon
   if (rest[rest.length - 1].label === ";") {
@@ -618,18 +636,18 @@ function _parseReturnStatement(edge: Edge): Vertex {
     return null;
   }
 
-  assert(rest.length === 1);
+  console.assert(rest.length === 1);
   return rest[0];
 }
 
 function _parseParanthesizedExpression(edge: Edge): Vertex {
-  assert(edge.label === "ParenthesizedExpression");
-  assert(edge.sources.length === 3);
+  console.assert(edge.label === "ParenthesizedExpression");
+  console.assert(edge.sources.length === 3);
 
   const [lparan, subexpression, rparan] = edge.sources;
 
-  assert(lparan.label === "(");
-  assert(rparan.label === ")");
+  console.assert(lparan.label === "(");
+  console.assert(rparan.label === ")");
 
   return subexpression;
 }
@@ -639,10 +657,10 @@ function _parseBinaryExpression(
   assertType = true
 ): [Vertex, string, Vertex] {
   if (assertType) {
-    assert(edge.label === "BinaryExpression");
+    console.assert(edge.label === "BinaryExpression");
   }
 
-  assert(edge.sources.length === 3);
+  console.assert(edge.sources.length === 3);
 
   const [left, op, right] = edge.sources;
 
@@ -660,7 +678,7 @@ function stripGibberish(vertex: Vertex): Vertex {
   switch (label) {
     case "TypeAssertionExpression":
       // TODO: with pattern syntax
-      assert(sources.length === 4);
+      console.assert(sources.length === 4);
       return sources[3];
     default:
       return vertex;
@@ -676,7 +694,7 @@ function _getEdgeAndLabel(vertex: Vertex, edgeGroup: Edge[]): [Edge, string] {
     return [null, vertex.label];
   }
 
-  assert(edgeGroup.length === 1);
+  console.assert(edgeGroup.length === 1);
 
   const [edge] = edgeGroup;
   return [edge, edge.label];

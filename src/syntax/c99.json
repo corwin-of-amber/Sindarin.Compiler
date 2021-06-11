@@ -1,1 +1,2168 @@
-{"OPERATORS":{"ELLIPSIS":"...","RIGHT_ASSIGN":">>=","LEFT_ASSIGN":"<<=","ADD_ASSIGN":"+=","SUB_ASSIGN":"-=","MUL_ASSIGN":"*=","DIV_ASSIGN":"/=","MOD_ASSIGN":"%=","AND_ASSIGN":"&=","XOR_ASSIGN":"^=","OR_ASSIGN":"|=","RIGHT_OP":">>","LEFT_OP":"<<","INC_OP":"++","DEC_OP":"--","PTR_OP":"->","AND_OP":"&&","OR_OP":"||","LE_OP":"<=","GE_OP":">=","EQ_OP":"==","NE_OP":"!=",";":";","{":"{","}":"}",",":",",":":":","=":"=","(":"(",")":")","[":"[","]":"]",".":".","&":"&","!":"!","~":"~","-":"-","+":"+","*":"*","/":"/","%":"%","<":"<",">":">","^":"^","|":"|","?":"?"},"KEYWORDS":{"AUTO":"auto","BOOL":"_Bool","BREAK":"break","CASE":"case","CHAR":"char","COMPLEX":"_Complex","CONST":"const","CONTINUE":"continue","DEFAULT":"default","DO":"do","DOUBLE":"double","ELSE":"else","ENUM":"enum","EXTERN":"extern","FLOAT":"float","FOR":"for","GOTO":"goto","IF":"if","IMAGINARY":"_Imaginary","INLINE":"inline","INT":"int","LONG":"long","REGISTER":"register","RESTRICT":"restrict","RETURN":"return","SHORT":"short","SIGNED":"signed","SIZEOF":"sizeof","STATIC":"static","STRUCT":"struct","SWITCH":"switch","TYPEDEF":"typedef","UNION":"union","UNSIGNED":"unsigned","VOID":"void","VOLATILE":"volatile","WHILE":"while"},"GRAMMAR":{"ParserRules":[{"name":"primary_expression","symbols":[{"type":"IDENTIFIER"}]},{"name":"primary_expression","symbols":[{"type":"CONSTANT"}]},{"name":"primary_expression","symbols":["STRING_LITERAL"]},{"name":"primary_expression","symbols":[{"literal":"("},"expression",{"literal":")"}]},{"name":"postfix_expression","symbols":["primary_expression"]},{"name":"postfix_expression","symbols":["postfix_expression",{"literal":"["},"expression",{"literal":"]"}]},{"name":"postfix_expression","symbols":["postfix_expression",{"literal":"("},{"literal":")"}]},{"name":"postfix_expression","symbols":["postfix_expression",{"literal":"("},"argument_expression_list",{"literal":")"}]},{"name":"postfix_expression","symbols":["postfix_expression",{"literal":"."},{"type":"IDENTIFIER"}]},{"name":"postfix_expression","symbols":["postfix_expression",{"type":"PTR_OP"},{"type":"IDENTIFIER"}]},{"name":"postfix_expression","symbols":["postfix_expression",{"type":"INC_OP"}]},{"name":"postfix_expression","symbols":["postfix_expression",{"type":"DEC_OP"}]},{"name":"postfix_expression","symbols":[{"literal":"("},"type_name",{"literal":")"},{"literal":"{"},"initializer_list",{"literal":"}"}]},{"name":"postfix_expression","symbols":[{"literal":"("},"type_name",{"literal":")"},{"literal":"{"},"initializer_list",{"literal":","},{"literal":"}"}]},{"name":"argument_expression_list","symbols":["assignment_expression"]},{"name":"argument_expression_list","symbols":["argument_expression_list",{"literal":","},"assignment_expression"]},{"name":"unary_expression","symbols":["postfix_expression"]},{"name":"unary_expression","symbols":[{"type":"INC_OP"},"unary_expression"]},{"name":"unary_expression","symbols":[{"type":"DEC_OP"},"unary_expression"]},{"name":"unary_expression","symbols":["unary_operator","cast_expression"]},{"name":"unary_expression","symbols":[{"type":"SIZEOF"},"unary_expression"]},{"name":"unary_expression","symbols":[{"type":"SIZEOF"},{"literal":"("},"type_name",{"literal":")"}]},{"name":"unary_operator","symbols":[{"literal":"&"}]},{"name":"unary_operator","symbols":[{"literal":"*"}]},{"name":"unary_operator","symbols":[{"literal":"+"}]},{"name":"unary_operator","symbols":[{"literal":"-"}]},{"name":"unary_operator","symbols":[{"literal":"~"}]},{"name":"unary_operator","symbols":[{"literal":"!"}]},{"name":"cast_expression","symbols":["unary_expression"]},{"name":"cast_expression","symbols":[{"literal":"("},"type_name",{"literal":")"},"cast_expression"]},{"name":"multiplicative_expression","symbols":["cast_expression"]},{"name":"multiplicative_expression","symbols":["multiplicative_expression",{"literal":"*"},"cast_expression"]},{"name":"multiplicative_expression","symbols":["multiplicative_expression",{"literal":"/"},"cast_expression"]},{"name":"multiplicative_expression","symbols":["multiplicative_expression",{"literal":"%"},"cast_expression"]},{"name":"additive_expression","symbols":["multiplicative_expression"]},{"name":"additive_expression","symbols":["additive_expression",{"literal":"+"},"multiplicative_expression"]},{"name":"additive_expression","symbols":["additive_expression",{"literal":"-"},"multiplicative_expression"]},{"name":"shift_expression","symbols":["additive_expression"]},{"name":"shift_expression","symbols":["shift_expression",{"type":"LEFT_OP"},"additive_expression"]},{"name":"shift_expression","symbols":["shift_expression",{"type":"RIGHT_OP"},"additive_expression"]},{"name":"relational_expression","symbols":["shift_expression"]},{"name":"relational_expression","symbols":["relational_expression",{"literal":"<"},"shift_expression"]},{"name":"relational_expression","symbols":["relational_expression",{"literal":">"},"shift_expression"]},{"name":"relational_expression","symbols":["relational_expression",{"type":"LE_OP"},"shift_expression"]},{"name":"relational_expression","symbols":["relational_expression",{"type":"GE_OP"},"shift_expression"]},{"name":"equality_expression","symbols":["relational_expression"]},{"name":"equality_expression","symbols":["equality_expression",{"type":"EQ_OP"},"relational_expression"]},{"name":"equality_expression","symbols":["equality_expression",{"type":"NE_OP"},"relational_expression"]},{"name":"and_expression","symbols":["equality_expression"]},{"name":"and_expression","symbols":["and_expression",{"literal":"&"},"equality_expression"]},{"name":"exclusive_or_expression","symbols":["and_expression"]},{"name":"exclusive_or_expression","symbols":["exclusive_or_expression",{"literal":"^"},"and_expression"]},{"name":"inclusive_or_expression","symbols":["exclusive_or_expression"]},{"name":"inclusive_or_expression","symbols":["inclusive_or_expression",{"literal":""}]},{"name":"inclusive_or_expression","symbols":[{"literal":""},"exclusive_or_expression"]},{"name":"logical_and_expression","symbols":["inclusive_or_expression"]},{"name":"logical_and_expression","symbols":["logical_and_expression",{"type":"AND_OP"},"inclusive_or_expression"]},{"name":"logical_or_expression","symbols":["logical_and_expression"]},{"name":"logical_or_expression","symbols":["logical_or_expression",{"type":"OR_OP"},"logical_and_expression"]},{"name":"conditional_expression","symbols":["logical_or_expression"]},{"name":"conditional_expression","symbols":["logical_or_expression",{"literal":"?"},"expression",{"literal":":"},"conditional_expression"]},{"name":"assignment_expression","symbols":["conditional_expression"]},{"name":"assignment_expression","symbols":["unary_expression","assignment_operator","assignment_expression"]},{"name":"assignment_operator","symbols":[{"literal":"="}]},{"name":"assignment_operator","symbols":[{"type":"MUL_ASSIGN"}]},{"name":"assignment_operator","symbols":[{"type":"DIV_ASSIGN"}]},{"name":"assignment_operator","symbols":[{"type":"MOD_ASSIGN"}]},{"name":"assignment_operator","symbols":[{"type":"ADD_ASSIGN"}]},{"name":"assignment_operator","symbols":[{"type":"SUB_ASSIGN"}]},{"name":"assignment_operator","symbols":[{"type":"LEFT_ASSIGN"}]},{"name":"assignment_operator","symbols":[{"type":"RIGHT_ASSIGN"}]},{"name":"assignment_operator","symbols":[{"type":"AND_ASSIGN"}]},{"name":"assignment_operator","symbols":[{"type":"XOR_ASSIGN"}]},{"name":"assignment_operator","symbols":[{"type":"OR_ASSIGN"}]},{"name":"expression","symbols":["assignment_expression"]},{"name":"expression","symbols":["expression",{"literal":","},"assignment_expression"]},{"name":"constant_expression","symbols":["conditional_expression"]},{"name":"declaration","symbols":["declaration_specifiers",{"literal":";"}]},{"name":"declaration","symbols":["declaration_specifiers","init_declarator_list",{"literal":";"}]},{"name":"declaration_specifiers","symbols":["storage_class_specifier"]},{"name":"declaration_specifiers","symbols":["storage_class_specifier","declaration_specifiers"]},{"name":"declaration_specifiers","symbols":["type_specifier"]},{"name":"declaration_specifiers","symbols":["type_specifier","declaration_specifiers"]},{"name":"declaration_specifiers","symbols":["type_qualifier"]},{"name":"declaration_specifiers","symbols":["type_qualifier","declaration_specifiers"]},{"name":"declaration_specifiers","symbols":["function_specifier"]},{"name":"declaration_specifiers","symbols":["function_specifier","declaration_specifiers"]},{"name":"init_declarator_list","symbols":["init_declarator"]},{"name":"init_declarator_list","symbols":["init_declarator_list",{"literal":","},"init_declarator"]},{"name":"init_declarator","symbols":["declarator"]},{"name":"init_declarator","symbols":["declarator",{"literal":"="},"initializer"]},{"name":"storage_class_specifier","symbols":[{"type":"TYPEDEF"}]},{"name":"storage_class_specifier","symbols":[{"type":"EXTERN"}]},{"name":"storage_class_specifier","symbols":[{"type":"STATIC"}]},{"name":"storage_class_specifier","symbols":[{"type":"AUTO"}]},{"name":"storage_class_specifier","symbols":[{"type":"REGISTER"}]},{"name":"type_specifier","symbols":[{"type":"VOID"}]},{"name":"type_specifier","symbols":[{"type":"CHAR"}]},{"name":"type_specifier","symbols":[{"type":"SHORT"}]},{"name":"type_specifier","symbols":[{"type":"INT"}]},{"name":"type_specifier","symbols":[{"type":"LONG"}]},{"name":"type_specifier","symbols":[{"type":"FLOAT"}]},{"name":"type_specifier","symbols":[{"type":"DOUBLE"}]},{"name":"type_specifier","symbols":[{"type":"SIGNED"}]},{"name":"type_specifier","symbols":[{"type":"UNSIGNED"}]},{"name":"type_specifier","symbols":[{"type":"BOOL"}]},{"name":"type_specifier","symbols":[{"type":"COMPLEX"}]},{"name":"type_specifier","symbols":[{"type":"IMAGINARY"}]},{"name":"type_specifier","symbols":["struct_or_union_specifier"]},{"name":"type_specifier","symbols":["enum_specifier"]},{"name":"type_specifier","symbols":["TYPE_NAME"]},{"name":"struct_or_union_specifier","symbols":["struct_or_union",{"type":"IDENTIFIER"},{"literal":"{"},"struct_declaration_list",{"literal":"}"}]},{"name":"struct_or_union_specifier","symbols":["struct_or_union",{"literal":"{"},"struct_declaration_list",{"literal":"}"}]},{"name":"struct_or_union_specifier","symbols":["struct_or_union",{"type":"IDENTIFIER"}]},{"name":"struct_or_union","symbols":[{"type":"STRUCT"}]},{"name":"struct_or_union","symbols":[{"type":"UNION"}]},{"name":"struct_declaration_list","symbols":["struct_declaration"]},{"name":"struct_declaration_list","symbols":["struct_declaration_list","struct_declaration"]},{"name":"struct_declaration","symbols":["specifier_qualifier_list","struct_declarator_list",{"literal":";"}]},{"name":"specifier_qualifier_list","symbols":["type_specifier","specifier_qualifier_list"]},{"name":"specifier_qualifier_list","symbols":["type_specifier"]},{"name":"specifier_qualifier_list","symbols":["type_qualifier","specifier_qualifier_list"]},{"name":"specifier_qualifier_list","symbols":["type_qualifier"]},{"name":"struct_declarator_list","symbols":["struct_declarator"]},{"name":"struct_declarator_list","symbols":["struct_declarator_list",{"literal":","},"struct_declarator"]},{"name":"struct_declarator","symbols":["declarator"]},{"name":"struct_declarator","symbols":[{"literal":":"},"constant_expression"]},{"name":"struct_declarator","symbols":["declarator",{"literal":":"},"constant_expression"]},{"name":"enum_specifier","symbols":[{"type":"ENUM"},{"literal":"{"},"enumerator_list",{"literal":"}"}]},{"name":"enum_specifier","symbols":[{"type":"ENUM"},{"type":"IDENTIFIER"},{"literal":"{"},"enumerator_list",{"literal":"}"}]},{"name":"enum_specifier","symbols":[{"type":"ENUM"},{"literal":"{"},"enumerator_list",{"literal":","},{"literal":"}"}]},{"name":"enum_specifier","symbols":[{"type":"ENUM"},{"type":"IDENTIFIER"},{"literal":"{"},"enumerator_list",{"literal":","},{"literal":"}"}]},{"name":"enum_specifier","symbols":[{"type":"ENUM"},{"type":"IDENTIFIER"}]},{"name":"enumerator_list","symbols":["enumerator"]},{"name":"enumerator_list","symbols":["enumerator_list",{"literal":","},"enumerator"]},{"name":"enumerator","symbols":[{"type":"IDENTIFIER"}]},{"name":"enumerator","symbols":[{"type":"IDENTIFIER"},{"literal":"="},"constant_expression"]},{"name":"type_qualifier","symbols":[{"type":"CONST"}]},{"name":"type_qualifier","symbols":[{"type":"RESTRICT"}]},{"name":"type_qualifier","symbols":[{"type":"VOLATILE"}]},{"name":"function_specifier","symbols":[{"type":"INLINE"}]},{"name":"declarator","symbols":["pointer","direct_declarator"]},{"name":"declarator","symbols":["direct_declarator"]},{"name":"direct_declarator","symbols":[{"type":"IDENTIFIER"}]},{"name":"direct_declarator","symbols":[{"literal":"("},"declarator",{"literal":")"}]},{"name":"direct_declarator","symbols":["direct_declarator",{"literal":"["},"type_qualifier_list","assignment_expression",{"literal":"]"}]},{"name":"direct_declarator","symbols":["direct_declarator",{"literal":"["},"type_qualifier_list",{"literal":"]"}]},{"name":"direct_declarator","symbols":["direct_declarator",{"literal":"["},"assignment_expression",{"literal":"]"}]},{"name":"direct_declarator","symbols":["direct_declarator",{"literal":"["},{"type":"STATIC"},"type_qualifier_list","assignment_expression",{"literal":"]"}]},{"name":"direct_declarator","symbols":["direct_declarator",{"literal":"["},"type_qualifier_list",{"type":"STATIC"},"assignment_expression",{"literal":"]"}]},{"name":"direct_declarator","symbols":["direct_declarator",{"literal":"["},"type_qualifier_list",{"literal":"*"},{"literal":"]"}]},{"name":"direct_declarator","symbols":["direct_declarator",{"literal":"["},{"literal":"*"},{"literal":"]"}]},{"name":"direct_declarator","symbols":["direct_declarator",{"literal":"["},{"literal":"]"}]},{"name":"direct_declarator","symbols":["direct_declarator",{"literal":"("},"parameter_type_list",{"literal":")"}]},{"name":"direct_declarator","symbols":["direct_declarator",{"literal":"("},"identifier_list",{"literal":")"}]},{"name":"direct_declarator","symbols":["direct_declarator",{"literal":"("},{"literal":")"}]},{"name":"pointer","symbols":[{"literal":"*"}]},{"name":"pointer","symbols":[{"literal":"*"},"type_qualifier_list"]},{"name":"pointer","symbols":[{"literal":"*"},"pointer"]},{"name":"pointer","symbols":[{"literal":"*"},"type_qualifier_list","pointer"]},{"name":"type_qualifier_list","symbols":["type_qualifier"]},{"name":"type_qualifier_list","symbols":["type_qualifier_list","type_qualifier"]},{"name":"parameter_type_list","symbols":["parameter_list"]},{"name":"parameter_type_list","symbols":["parameter_list",{"literal":","},{"type":"ELLIPSIS"}]},{"name":"parameter_list","symbols":["parameter_declaration"]},{"name":"parameter_list","symbols":["parameter_list",{"literal":","},"parameter_declaration"]},{"name":"parameter_declaration","symbols":["declaration_specifiers","declarator"]},{"name":"parameter_declaration","symbols":["declaration_specifiers","abstract_declarator"]},{"name":"parameter_declaration","symbols":["declaration_specifiers"]},{"name":"identifier_list","symbols":[{"type":"IDENTIFIER"}]},{"name":"identifier_list","symbols":["identifier_list",{"literal":","},{"type":"IDENTIFIER"}]},{"name":"type_name","symbols":["specifier_qualifier_list"]},{"name":"type_name","symbols":["specifier_qualifier_list","abstract_declarator"]},{"name":"abstract_declarator","symbols":["pointer"]},{"name":"abstract_declarator","symbols":["direct_abstract_declarator"]},{"name":"abstract_declarator","symbols":["pointer","direct_abstract_declarator"]},{"name":"direct_abstract_declarator","symbols":[{"literal":"("},"abstract_declarator",{"literal":")"}]},{"name":"direct_abstract_declarator","symbols":[{"literal":"["},{"literal":"]"}]},{"name":"direct_abstract_declarator","symbols":[{"literal":"["},"assignment_expression",{"literal":"]"}]},{"name":"direct_abstract_declarator","symbols":["direct_abstract_declarator",{"literal":"["},{"literal":"]"}]},{"name":"direct_abstract_declarator","symbols":["direct_abstract_declarator",{"literal":"["},"assignment_expression",{"literal":"]"}]},{"name":"direct_abstract_declarator","symbols":[{"literal":"["},{"literal":"*"},{"literal":"]"}]},{"name":"direct_abstract_declarator","symbols":["direct_abstract_declarator",{"literal":"["},{"literal":"*"},{"literal":"]"}]},{"name":"direct_abstract_declarator","symbols":[{"literal":"("},{"literal":")"}]},{"name":"direct_abstract_declarator","symbols":[{"literal":"("},"parameter_type_list",{"literal":")"}]},{"name":"direct_abstract_declarator","symbols":["direct_abstract_declarator",{"literal":"("},{"literal":")"}]},{"name":"direct_abstract_declarator","symbols":["direct_abstract_declarator",{"literal":"("},"parameter_type_list",{"literal":")"}]},{"name":"initializer","symbols":["assignment_expression"]},{"name":"initializer","symbols":[{"literal":"{"},"initializer_list",{"literal":"}"}]},{"name":"initializer","symbols":[{"literal":"{"},"initializer_list",{"literal":","},{"literal":"}"}]},{"name":"initializer_list","symbols":["initializer"]},{"name":"initializer_list","symbols":["designation","initializer"]},{"name":"initializer_list","symbols":["initializer_list",{"literal":","},"initializer"]},{"name":"initializer_list","symbols":["initializer_list",{"literal":","},"designation","initializer"]},{"name":"designation","symbols":["designator_list",{"literal":"="}]},{"name":"designator_list","symbols":["designator"]},{"name":"designator_list","symbols":["designator_list","designator"]},{"name":"designator","symbols":[{"literal":"["},"constant_expression",{"literal":"]"}]},{"name":"designator","symbols":[{"literal":"."},{"type":"IDENTIFIER"}]},{"name":"statement","symbols":["labeled_statement"]},{"name":"statement","symbols":["compound_statement"]},{"name":"statement","symbols":["expression_statement"]},{"name":"statement","symbols":["selection_statement"]},{"name":"statement","symbols":["iteration_statement"]},{"name":"statement","symbols":["jump_statement"]},{"name":"labeled_statement","symbols":[{"type":"IDENTIFIER"},{"literal":":"},"statement"]},{"name":"labeled_statement","symbols":[{"type":"CASE"},"constant_expression",{"literal":":"},"statement"]},{"name":"labeled_statement","symbols":[{"type":"DEFAULT"},{"literal":":"},"statement"]},{"name":"compound_statement","symbols":[{"literal":"{"},{"literal":"}"}]},{"name":"compound_statement","symbols":[{"literal":"{"},"block_item_list",{"literal":"}"}]},{"name":"block_item_list","symbols":["block_item"]},{"name":"block_item_list","symbols":["block_item_list","block_item"]},{"name":"block_item","symbols":["declaration"]},{"name":"block_item","symbols":["statement"]},{"name":"expression_statement","symbols":[{"literal":";"}]},{"name":"expression_statement","symbols":["expression",{"literal":";"}]},{"name":"selection_statement","symbols":[{"type":"IF"},{"literal":"("},"expression",{"literal":")"},"statement"]},{"name":"selection_statement","symbols":[{"type":"IF"},{"literal":"("},"expression",{"literal":")"},"statement",{"type":"ELSE"},"statement"]},{"name":"selection_statement","symbols":[{"type":"SWITCH"},{"literal":"("},"expression",{"literal":")"},"statement"]},{"name":"iteration_statement","symbols":[{"type":"WHILE"},{"literal":"("},"expression",{"literal":")"},"statement"]},{"name":"iteration_statement","symbols":[{"type":"DO"},"statement",{"type":"WHILE"},{"literal":"("},"expression",{"literal":")"},{"literal":";"}]},{"name":"iteration_statement","symbols":[{"type":"FOR"},{"literal":"("},"expression_statement","expression_statement",{"literal":")"},"statement"]},{"name":"iteration_statement","symbols":[{"type":"FOR"},{"literal":"("},"expression_statement","expression_statement","expression",{"literal":")"},"statement"]},{"name":"iteration_statement","symbols":[{"type":"FOR"},{"literal":"("},"declaration","expression_statement",{"literal":")"},"statement"]},{"name":"iteration_statement","symbols":[{"type":"FOR"},{"literal":"("},"declaration","expression_statement","expression",{"literal":")"},"statement"]},{"name":"jump_statement","symbols":[{"type":"GOTO"},{"type":"IDENTIFIER"},{"literal":";"}]},{"name":"jump_statement","symbols":[{"type":"CONTINUE"},{"literal":";"}]},{"name":"jump_statement","symbols":[{"type":"BREAK"},{"literal":";"}]},{"name":"jump_statement","symbols":[{"type":"RETURN"},{"literal":";"}]},{"name":"jump_statement","symbols":[{"type":"RETURN"},"expression",{"literal":";"}]},{"name":"translation_unit","symbols":["external_declaration"]},{"name":"translation_unit","symbols":["translation_unit","external_declaration"]},{"name":"external_declaration","symbols":["function_definition"]},{"name":"external_declaration","symbols":["declaration"]},{"name":"function_definition","symbols":["declaration_specifiers","declarator","declaration_list","compound_statement"]},{"name":"function_definition","symbols":["declaration_specifiers","declarator","compound_statement"]},{"name":"declaration_list","symbols":["declaration"]},{"name":"declaration_list","symbols":["declaration_list","declaration"]}],"ParserStart":"translation_unit"}}
+{
+  "OPERATORS": {
+    "ELLIPSIS": "...",
+    "RIGHT_ASSIGN": ">>=",
+    "LEFT_ASSIGN": "<<=",
+    "ADD_ASSIGN": "+=",
+    "SUB_ASSIGN": "-=",
+    "MUL_ASSIGN": "*=",
+    "DIV_ASSIGN": "/=",
+    "MOD_ASSIGN": "%=",
+    "AND_ASSIGN": "&=",
+    "XOR_ASSIGN": "^=",
+    "OR_ASSIGN": "|=",
+    "RIGHT_OP": ">>",
+    "LEFT_OP": "<<",
+    "INC_OP": "++",
+    "DEC_OP": "--",
+    "PTR_OP": "->",
+    "AND_OP": "&&",
+    "OR_OP": "||",
+    "LE_OP": "<=",
+    "GE_OP": ">=",
+    "EQ_OP": "==",
+    "NE_OP": "!=",
+    ";": ";",
+    "{": "{",
+    "}": "}",
+    ",": ",",
+    ":": ":",
+    "=": "=",
+    "(": "(",
+    ")": ")",
+    "[": "[",
+    "]": "]",
+    ".": ".",
+    "&": "&",
+    "!": "!",
+    "~": "~",
+    "-": "-",
+    "+": "+",
+    "*": "*",
+    "/": "/",
+    "%": "%",
+    "<": "<",
+    ">": ">",
+    "^": "^",
+    "|": "|",
+    "?": "?"
+  },
+  "KEYWORDS": {
+    "AUTO": "auto",
+    "BOOL": "_Bool",
+    "BREAK": "break",
+    "CASE": "case",
+    "CHAR": "char",
+    "COMPLEX": "_Complex",
+    "CONST": "const",
+    "CONTINUE": "continue",
+    "DEFAULT": "default",
+    "DO": "do",
+    "DOUBLE": "double",
+    "ELSE": "else",
+    "ENUM": "enum",
+    "EXTERN": "extern",
+    "FLOAT": "float",
+    "FOR": "for",
+    "GOTO": "goto",
+    "IF": "if",
+    "IMAGINARY": "_Imaginary",
+    "INLINE": "inline",
+    "INT": "int",
+    "LONG": "long",
+    "REGISTER": "register",
+    "RESTRICT": "restrict",
+    "RETURN": "return",
+    "SHORT": "short",
+    "SIGNED": "signed",
+    "SIZEOF": "sizeof",
+    "STATIC": "static",
+    "STRUCT": "struct",
+    "SWITCH": "switch",
+    "TYPEDEF": "typedef",
+    "UNION": "union",
+    "UNSIGNED": "unsigned",
+    "VOID": "void",
+    "VOLATILE": "volatile",
+    "WHILE": "while"
+  },
+  "GRAMMAR": {
+    "ParserRules": [
+      {
+        "name": "primary_expression",
+        "symbols": [
+          {
+            "type": "IDENTIFIER"
+          }
+        ]
+      },
+      {
+        "name": "primary_expression",
+        "symbols": [
+          {
+            "type": "CONSTANT"
+          }
+        ]
+      },
+      {
+        "name": "primary_expression",
+        "symbols": ["STRING_LITERAL"]
+      },
+      {
+        "name": "primary_expression",
+        "symbols": [
+          {
+            "literal": "("
+          },
+          "expression",
+          {
+            "literal": ")"
+          }
+        ]
+      },
+      {
+        "name": "postfix_expression",
+        "symbols": ["primary_expression"]
+      },
+      {
+        "name": "postfix_expression",
+        "symbols": [
+          "postfix_expression",
+          {
+            "literal": "["
+          },
+          "expression",
+          {
+            "literal": "]"
+          }
+        ]
+      },
+      {
+        "name": "postfix_expression",
+        "symbols": [
+          "postfix_expression",
+          {
+            "literal": "("
+          },
+          {
+            "literal": ")"
+          }
+        ]
+      },
+      {
+        "name": "postfix_expression",
+        "symbols": [
+          "postfix_expression",
+          {
+            "literal": "("
+          },
+          "argument_expression_list",
+          {
+            "literal": ")"
+          }
+        ]
+      },
+      {
+        "name": "postfix_expression",
+        "symbols": [
+          "postfix_expression",
+          {
+            "literal": "."
+          },
+          {
+            "type": "IDENTIFIER"
+          }
+        ]
+      },
+      {
+        "name": "postfix_expression",
+        "symbols": [
+          "postfix_expression",
+          {
+            "type": "PTR_OP"
+          },
+          {
+            "type": "IDENTIFIER"
+          }
+        ]
+      },
+      {
+        "name": "postfix_expression",
+        "symbols": [
+          "postfix_expression",
+          {
+            "type": "INC_OP"
+          }
+        ]
+      },
+      {
+        "name": "postfix_expression",
+        "symbols": [
+          "postfix_expression",
+          {
+            "type": "DEC_OP"
+          }
+        ]
+      },
+      {
+        "name": "postfix_expression",
+        "symbols": [
+          {
+            "literal": "("
+          },
+          "type_name",
+          {
+            "literal": ")"
+          },
+          {
+            "literal": "{"
+          },
+          "initializer_list",
+          {
+            "literal": "}"
+          }
+        ]
+      },
+      {
+        "name": "postfix_expression",
+        "symbols": [
+          {
+            "literal": "("
+          },
+          "type_name",
+          {
+            "literal": ")"
+          },
+          {
+            "literal": "{"
+          },
+          "initializer_list",
+          {
+            "literal": ","
+          },
+          {
+            "literal": "}"
+          }
+        ]
+      },
+      {
+        "name": "argument_expression_list",
+        "symbols": ["assignment_expression"]
+      },
+      {
+        "name": "argument_expression_list",
+        "symbols": [
+          "argument_expression_list",
+          {
+            "literal": ","
+          },
+          "assignment_expression"
+        ]
+      },
+      {
+        "name": "unary_expression",
+        "symbols": ["postfix_expression"]
+      },
+      {
+        "name": "unary_expression",
+        "symbols": [
+          {
+            "type": "INC_OP"
+          },
+          "unary_expression"
+        ]
+      },
+      {
+        "name": "unary_expression",
+        "symbols": [
+          {
+            "type": "DEC_OP"
+          },
+          "unary_expression"
+        ]
+      },
+      {
+        "name": "unary_expression",
+        "symbols": ["unary_operator", "cast_expression"]
+      },
+      {
+        "name": "unary_expression",
+        "symbols": [
+          {
+            "type": "SIZEOF"
+          },
+          "unary_expression"
+        ]
+      },
+      {
+        "name": "unary_expression",
+        "symbols": [
+          {
+            "type": "SIZEOF"
+          },
+          {
+            "literal": "("
+          },
+          "type_name",
+          {
+            "literal": ")"
+          }
+        ]
+      },
+      {
+        "name": "unary_operator",
+        "symbols": [
+          {
+            "literal": "&"
+          }
+        ]
+      },
+      {
+        "name": "unary_operator",
+        "symbols": [
+          {
+            "literal": "*"
+          }
+        ]
+      },
+      {
+        "name": "unary_operator",
+        "symbols": [
+          {
+            "literal": "+"
+          }
+        ]
+      },
+      {
+        "name": "unary_operator",
+        "symbols": [
+          {
+            "literal": "-"
+          }
+        ]
+      },
+      {
+        "name": "unary_operator",
+        "symbols": [
+          {
+            "literal": "~"
+          }
+        ]
+      },
+      {
+        "name": "unary_operator",
+        "symbols": [
+          {
+            "literal": "!"
+          }
+        ]
+      },
+      {
+        "name": "cast_expression",
+        "symbols": ["unary_expression"]
+      },
+      {
+        "name": "cast_expression",
+        "symbols": [
+          {
+            "literal": "("
+          },
+          "type_name",
+          {
+            "literal": ")"
+          },
+          "cast_expression"
+        ]
+      },
+      {
+        "name": "multiplicative_expression",
+        "symbols": ["cast_expression"]
+      },
+      {
+        "name": "multiplicative_expression",
+        "symbols": [
+          "multiplicative_expression",
+          {
+            "literal": "*"
+          },
+          "cast_expression"
+        ]
+      },
+      {
+        "name": "multiplicative_expression",
+        "symbols": [
+          "multiplicative_expression",
+          {
+            "literal": "/"
+          },
+          "cast_expression"
+        ]
+      },
+      {
+        "name": "multiplicative_expression",
+        "symbols": [
+          "multiplicative_expression",
+          {
+            "literal": "%"
+          },
+          "cast_expression"
+        ]
+      },
+      {
+        "name": "additive_expression",
+        "symbols": ["multiplicative_expression"]
+      },
+      {
+        "name": "additive_expression",
+        "symbols": [
+          "additive_expression",
+          {
+            "literal": "+"
+          },
+          "multiplicative_expression"
+        ]
+      },
+      {
+        "name": "additive_expression",
+        "symbols": [
+          "additive_expression",
+          {
+            "literal": "-"
+          },
+          "multiplicative_expression"
+        ]
+      },
+      {
+        "name": "shift_expression",
+        "symbols": ["additive_expression"]
+      },
+      {
+        "name": "shift_expression",
+        "symbols": [
+          "shift_expression",
+          {
+            "type": "LEFT_OP"
+          },
+          "additive_expression"
+        ]
+      },
+      {
+        "name": "shift_expression",
+        "symbols": [
+          "shift_expression",
+          {
+            "type": "RIGHT_OP"
+          },
+          "additive_expression"
+        ]
+      },
+      {
+        "name": "relational_expression",
+        "symbols": ["shift_expression"]
+      },
+      {
+        "name": "relational_expression",
+        "symbols": [
+          "relational_expression",
+          {
+            "literal": "<"
+          },
+          "shift_expression"
+        ]
+      },
+      {
+        "name": "relational_expression",
+        "symbols": [
+          "relational_expression",
+          {
+            "literal": ">"
+          },
+          "shift_expression"
+        ]
+      },
+      {
+        "name": "relational_expression",
+        "symbols": [
+          "relational_expression",
+          {
+            "type": "LE_OP"
+          },
+          "shift_expression"
+        ]
+      },
+      {
+        "name": "relational_expression",
+        "symbols": [
+          "relational_expression",
+          {
+            "type": "GE_OP"
+          },
+          "shift_expression"
+        ]
+      },
+      {
+        "name": "equality_expression",
+        "symbols": ["relational_expression"]
+      },
+      {
+        "name": "equality_expression",
+        "symbols": [
+          "equality_expression",
+          {
+            "type": "EQ_OP"
+          },
+          "relational_expression"
+        ]
+      },
+      {
+        "name": "equality_expression",
+        "symbols": [
+          "equality_expression",
+          {
+            "type": "NE_OP"
+          },
+          "relational_expression"
+        ]
+      },
+      {
+        "name": "and_expression",
+        "symbols": ["equality_expression"]
+      },
+      {
+        "name": "and_expression",
+        "symbols": [
+          "and_expression",
+          {
+            "literal": "&"
+          },
+          "equality_expression"
+        ]
+      },
+      {
+        "name": "exclusive_or_expression",
+        "symbols": ["and_expression"]
+      },
+      {
+        "name": "exclusive_or_expression",
+        "symbols": [
+          "exclusive_or_expression",
+          {
+            "literal": "^"
+          },
+          "and_expression"
+        ]
+      },
+      {
+        "name": "inclusive_or_expression",
+        "symbols": ["exclusive_or_expression"]
+      },
+      {
+        "name": "inclusive_or_expression",
+        "symbols": [
+          "inclusive_or_expression",
+          {
+            "literal": ""
+          }
+        ]
+      },
+      {
+        "name": "inclusive_or_expression",
+        "symbols": [
+          {
+            "literal": ""
+          },
+          "exclusive_or_expression"
+        ]
+      },
+      {
+        "name": "logical_and_expression",
+        "symbols": ["inclusive_or_expression"]
+      },
+      {
+        "name": "logical_and_expression",
+        "symbols": [
+          "logical_and_expression",
+          {
+            "type": "AND_OP"
+          },
+          "inclusive_or_expression"
+        ]
+      },
+      {
+        "name": "logical_or_expression",
+        "symbols": ["logical_and_expression"]
+      },
+      {
+        "name": "logical_or_expression",
+        "symbols": [
+          "logical_or_expression",
+          {
+            "type": "OR_OP"
+          },
+          "logical_and_expression"
+        ]
+      },
+      {
+        "name": "conditional_expression",
+        "symbols": ["logical_or_expression"]
+      },
+      {
+        "name": "conditional_expression",
+        "symbols": [
+          "logical_or_expression",
+          {
+            "literal": "?"
+          },
+          "expression",
+          {
+            "literal": ":"
+          },
+          "conditional_expression"
+        ]
+      },
+      {
+        "name": "assignment_expression",
+        "symbols": ["conditional_expression"]
+      },
+      {
+        "name": "assignment_expression",
+        "symbols": [
+          "unary_expression",
+          "assignment_operator",
+          "assignment_expression"
+        ]
+      },
+      {
+        "name": "assignment_operator",
+        "symbols": [
+          {
+            "literal": "="
+          }
+        ]
+      },
+      {
+        "name": "assignment_operator",
+        "symbols": [
+          {
+            "type": "MUL_ASSIGN"
+          }
+        ]
+      },
+      {
+        "name": "assignment_operator",
+        "symbols": [
+          {
+            "type": "DIV_ASSIGN"
+          }
+        ]
+      },
+      {
+        "name": "assignment_operator",
+        "symbols": [
+          {
+            "type": "MOD_ASSIGN"
+          }
+        ]
+      },
+      {
+        "name": "assignment_operator",
+        "symbols": [
+          {
+            "type": "ADD_ASSIGN"
+          }
+        ]
+      },
+      {
+        "name": "assignment_operator",
+        "symbols": [
+          {
+            "type": "SUB_ASSIGN"
+          }
+        ]
+      },
+      {
+        "name": "assignment_operator",
+        "symbols": [
+          {
+            "type": "LEFT_ASSIGN"
+          }
+        ]
+      },
+      {
+        "name": "assignment_operator",
+        "symbols": [
+          {
+            "type": "RIGHT_ASSIGN"
+          }
+        ]
+      },
+      {
+        "name": "assignment_operator",
+        "symbols": [
+          {
+            "type": "AND_ASSIGN"
+          }
+        ]
+      },
+      {
+        "name": "assignment_operator",
+        "symbols": [
+          {
+            "type": "XOR_ASSIGN"
+          }
+        ]
+      },
+      {
+        "name": "assignment_operator",
+        "symbols": [
+          {
+            "type": "OR_ASSIGN"
+          }
+        ]
+      },
+      {
+        "name": "expression",
+        "symbols": ["assignment_expression"]
+      },
+      {
+        "name": "expression",
+        "symbols": [
+          "expression",
+          {
+            "literal": ","
+          },
+          "assignment_expression"
+        ]
+      },
+      {
+        "name": "constant_expression",
+        "symbols": ["conditional_expression"]
+      },
+      {
+        "name": "declaration",
+        "symbols": [
+          "declaration_specifiers",
+          {
+            "literal": ";"
+          }
+        ]
+      },
+      {
+        "name": "declaration",
+        "symbols": [
+          "declaration_specifiers",
+          "init_declarator_list",
+          {
+            "literal": ";"
+          }
+        ]
+      },
+      {
+        "name": "declaration_specifiers",
+        "symbols": ["storage_class_specifier"]
+      },
+      {
+        "name": "declaration_specifiers",
+        "symbols": ["storage_class_specifier", "declaration_specifiers"]
+      },
+      {
+        "name": "declaration_specifiers",
+        "symbols": ["type_specifier"]
+      },
+      {
+        "name": "declaration_specifiers",
+        "symbols": ["type_specifier", "declaration_specifiers"]
+      },
+      {
+        "name": "declaration_specifiers",
+        "symbols": ["type_qualifier"]
+      },
+      {
+        "name": "declaration_specifiers",
+        "symbols": ["type_qualifier", "declaration_specifiers"]
+      },
+      {
+        "name": "declaration_specifiers",
+        "symbols": ["function_specifier"]
+      },
+      {
+        "name": "declaration_specifiers",
+        "symbols": ["function_specifier", "declaration_specifiers"]
+      },
+      {
+        "name": "init_declarator_list",
+        "symbols": ["init_declarator"]
+      },
+      {
+        "name": "init_declarator_list",
+        "symbols": [
+          "init_declarator_list",
+          {
+            "literal": ","
+          },
+          "init_declarator"
+        ]
+      },
+      {
+        "name": "init_declarator",
+        "symbols": ["declarator"]
+      },
+      {
+        "name": "init_declarator",
+        "symbols": [
+          "declarator",
+          {
+            "literal": "="
+          },
+          "initializer"
+        ]
+      },
+      {
+        "name": "storage_class_specifier",
+        "symbols": [
+          {
+            "type": "TYPEDEF"
+          }
+        ]
+      },
+      {
+        "name": "storage_class_specifier",
+        "symbols": [
+          {
+            "type": "EXTERN"
+          }
+        ]
+      },
+      {
+        "name": "storage_class_specifier",
+        "symbols": [
+          {
+            "type": "STATIC"
+          }
+        ]
+      },
+      {
+        "name": "storage_class_specifier",
+        "symbols": [
+          {
+            "type": "AUTO"
+          }
+        ]
+      },
+      {
+        "name": "storage_class_specifier",
+        "symbols": [
+          {
+            "type": "REGISTER"
+          }
+        ]
+      },
+      {
+        "name": "type_specifier",
+        "symbols": [
+          {
+            "type": "VOID"
+          }
+        ]
+      },
+      {
+        "name": "type_specifier",
+        "symbols": [
+          {
+            "type": "CHAR"
+          }
+        ]
+      },
+      {
+        "name": "type_specifier",
+        "symbols": [
+          {
+            "type": "SHORT"
+          }
+        ]
+      },
+      {
+        "name": "type_specifier",
+        "symbols": [
+          {
+            "type": "INT"
+          }
+        ]
+      },
+      {
+        "name": "type_specifier",
+        "symbols": [
+          {
+            "type": "LONG"
+          }
+        ]
+      },
+      {
+        "name": "type_specifier",
+        "symbols": [
+          {
+            "type": "FLOAT"
+          }
+        ]
+      },
+      {
+        "name": "type_specifier",
+        "symbols": [
+          {
+            "type": "DOUBLE"
+          }
+        ]
+      },
+      {
+        "name": "type_specifier",
+        "symbols": [
+          {
+            "type": "SIGNED"
+          }
+        ]
+      },
+      {
+        "name": "type_specifier",
+        "symbols": [
+          {
+            "type": "UNSIGNED"
+          }
+        ]
+      },
+      {
+        "name": "type_specifier",
+        "symbols": [
+          {
+            "type": "BOOL"
+          }
+        ]
+      },
+      {
+        "name": "type_specifier",
+        "symbols": [
+          {
+            "type": "COMPLEX"
+          }
+        ]
+      },
+      {
+        "name": "type_specifier",
+        "symbols": [
+          {
+            "type": "IMAGINARY"
+          }
+        ]
+      },
+      {
+        "name": "type_specifier",
+        "symbols": ["struct_or_union_specifier"]
+      },
+      {
+        "name": "type_specifier",
+        "symbols": ["enum_specifier"]
+      },
+      {
+        "name": "type_specifier",
+        "symbols": ["TYPE_NAME"]
+      },
+      {
+        "name": "struct_or_union_specifier",
+        "symbols": [
+          "struct_or_union",
+          {
+            "type": "IDENTIFIER"
+          },
+          {
+            "literal": "{"
+          },
+          "struct_declaration_list",
+          {
+            "literal": "}"
+          }
+        ]
+      },
+      {
+        "name": "struct_or_union_specifier",
+        "symbols": [
+          "struct_or_union",
+          {
+            "literal": "{"
+          },
+          "struct_declaration_list",
+          {
+            "literal": "}"
+          }
+        ]
+      },
+      {
+        "name": "struct_or_union_specifier",
+        "symbols": [
+          "struct_or_union",
+          {
+            "type": "IDENTIFIER"
+          }
+        ]
+      },
+      {
+        "name": "struct_or_union",
+        "symbols": [
+          {
+            "type": "STRUCT"
+          }
+        ]
+      },
+      {
+        "name": "struct_or_union",
+        "symbols": [
+          {
+            "type": "UNION"
+          }
+        ]
+      },
+      {
+        "name": "struct_declaration_list",
+        "symbols": ["struct_declaration"]
+      },
+      {
+        "name": "struct_declaration_list",
+        "symbols": ["struct_declaration_list", "struct_declaration"]
+      },
+      {
+        "name": "struct_declaration",
+        "symbols": [
+          "specifier_qualifier_list",
+          "struct_declarator_list",
+          {
+            "literal": ";"
+          }
+        ]
+      },
+      {
+        "name": "specifier_qualifier_list",
+        "symbols": ["type_specifier", "specifier_qualifier_list"]
+      },
+      {
+        "name": "specifier_qualifier_list",
+        "symbols": ["type_specifier"]
+      },
+      {
+        "name": "specifier_qualifier_list",
+        "symbols": ["type_qualifier", "specifier_qualifier_list"]
+      },
+      {
+        "name": "specifier_qualifier_list",
+        "symbols": ["type_qualifier"]
+      },
+      {
+        "name": "struct_declarator_list",
+        "symbols": ["struct_declarator"]
+      },
+      {
+        "name": "struct_declarator_list",
+        "symbols": [
+          "struct_declarator_list",
+          {
+            "literal": ","
+          },
+          "struct_declarator"
+        ]
+      },
+      {
+        "name": "struct_declarator",
+        "symbols": ["declarator"]
+      },
+      {
+        "name": "struct_declarator",
+        "symbols": [
+          {
+            "literal": ":"
+          },
+          "constant_expression"
+        ]
+      },
+      {
+        "name": "struct_declarator",
+        "symbols": [
+          "declarator",
+          {
+            "literal": ":"
+          },
+          "constant_expression"
+        ]
+      },
+      {
+        "name": "enum_specifier",
+        "symbols": [
+          {
+            "type": "ENUM"
+          },
+          {
+            "literal": "{"
+          },
+          "enumerator_list",
+          {
+            "literal": "}"
+          }
+        ]
+      },
+      {
+        "name": "enum_specifier",
+        "symbols": [
+          {
+            "type": "ENUM"
+          },
+          {
+            "type": "IDENTIFIER"
+          },
+          {
+            "literal": "{"
+          },
+          "enumerator_list",
+          {
+            "literal": "}"
+          }
+        ]
+      },
+      {
+        "name": "enum_specifier",
+        "symbols": [
+          {
+            "type": "ENUM"
+          },
+          {
+            "literal": "{"
+          },
+          "enumerator_list",
+          {
+            "literal": ","
+          },
+          {
+            "literal": "}"
+          }
+        ]
+      },
+      {
+        "name": "enum_specifier",
+        "symbols": [
+          {
+            "type": "ENUM"
+          },
+          {
+            "type": "IDENTIFIER"
+          },
+          {
+            "literal": "{"
+          },
+          "enumerator_list",
+          {
+            "literal": ","
+          },
+          {
+            "literal": "}"
+          }
+        ]
+      },
+      {
+        "name": "enum_specifier",
+        "symbols": [
+          {
+            "type": "ENUM"
+          },
+          {
+            "type": "IDENTIFIER"
+          }
+        ]
+      },
+      {
+        "name": "enumerator_list",
+        "symbols": ["enumerator"]
+      },
+      {
+        "name": "enumerator_list",
+        "symbols": [
+          "enumerator_list",
+          {
+            "literal": ","
+          },
+          "enumerator"
+        ]
+      },
+      {
+        "name": "enumerator",
+        "symbols": [
+          {
+            "type": "IDENTIFIER"
+          }
+        ]
+      },
+      {
+        "name": "enumerator",
+        "symbols": [
+          {
+            "type": "IDENTIFIER"
+          },
+          {
+            "literal": "="
+          },
+          "constant_expression"
+        ]
+      },
+      {
+        "name": "type_qualifier",
+        "symbols": [
+          {
+            "type": "CONST"
+          }
+        ]
+      },
+      {
+        "name": "type_qualifier",
+        "symbols": [
+          {
+            "type": "RESTRICT"
+          }
+        ]
+      },
+      {
+        "name": "type_qualifier",
+        "symbols": [
+          {
+            "type": "VOLATILE"
+          }
+        ]
+      },
+      {
+        "name": "function_specifier",
+        "symbols": [
+          {
+            "type": "INLINE"
+          }
+        ]
+      },
+      {
+        "name": "declarator",
+        "symbols": ["pointer", "direct_declarator"]
+      },
+      {
+        "name": "declarator",
+        "symbols": ["direct_declarator"]
+      },
+      {
+        "name": "direct_declarator",
+        "symbols": [
+          {
+            "type": "IDENTIFIER"
+          }
+        ]
+      },
+      {
+        "name": "direct_declarator",
+        "symbols": [
+          {
+            "literal": "("
+          },
+          "declarator",
+          {
+            "literal": ")"
+          }
+        ]
+      },
+      {
+        "name": "direct_declarator",
+        "symbols": [
+          "direct_declarator",
+          {
+            "literal": "["
+          },
+          "type_qualifier_list",
+          "assignment_expression",
+          {
+            "literal": "]"
+          }
+        ]
+      },
+      {
+        "name": "direct_declarator",
+        "symbols": [
+          "direct_declarator",
+          {
+            "literal": "["
+          },
+          "type_qualifier_list",
+          {
+            "literal": "]"
+          }
+        ]
+      },
+      {
+        "name": "direct_declarator",
+        "symbols": [
+          "direct_declarator",
+          {
+            "literal": "["
+          },
+          "assignment_expression",
+          {
+            "literal": "]"
+          }
+        ]
+      },
+      {
+        "name": "direct_declarator",
+        "symbols": [
+          "direct_declarator",
+          {
+            "literal": "["
+          },
+          {
+            "type": "STATIC"
+          },
+          "type_qualifier_list",
+          "assignment_expression",
+          {
+            "literal": "]"
+          }
+        ]
+      },
+      {
+        "name": "direct_declarator",
+        "symbols": [
+          "direct_declarator",
+          {
+            "literal": "["
+          },
+          "type_qualifier_list",
+          {
+            "type": "STATIC"
+          },
+          "assignment_expression",
+          {
+            "literal": "]"
+          }
+        ]
+      },
+      {
+        "name": "direct_declarator",
+        "symbols": [
+          "direct_declarator",
+          {
+            "literal": "["
+          },
+          "type_qualifier_list",
+          {
+            "literal": "*"
+          },
+          {
+            "literal": "]"
+          }
+        ]
+      },
+      {
+        "name": "direct_declarator",
+        "symbols": [
+          "direct_declarator",
+          {
+            "literal": "["
+          },
+          {
+            "literal": "*"
+          },
+          {
+            "literal": "]"
+          }
+        ]
+      },
+      {
+        "name": "direct_declarator",
+        "symbols": [
+          "direct_declarator",
+          {
+            "literal": "["
+          },
+          {
+            "literal": "]"
+          }
+        ]
+      },
+      {
+        "name": "direct_declarator",
+        "symbols": [
+          "direct_declarator",
+          {
+            "literal": "("
+          },
+          "parameter_type_list",
+          {
+            "literal": ")"
+          }
+        ]
+      },
+      {
+        "name": "direct_declarator",
+        "symbols": [
+          "direct_declarator",
+          {
+            "literal": "("
+          },
+          "identifier_list",
+          {
+            "literal": ")"
+          }
+        ]
+      },
+      {
+        "name": "direct_declarator",
+        "symbols": [
+          "direct_declarator",
+          {
+            "literal": "("
+          },
+          {
+            "literal": ")"
+          }
+        ]
+      },
+      {
+        "name": "pointer",
+        "symbols": [
+          {
+            "literal": "*"
+          }
+        ]
+      },
+      {
+        "name": "pointer",
+        "symbols": [
+          {
+            "literal": "*"
+          },
+          "type_qualifier_list"
+        ]
+      },
+      {
+        "name": "pointer",
+        "symbols": [
+          {
+            "literal": "*"
+          },
+          "pointer"
+        ]
+      },
+      {
+        "name": "pointer",
+        "symbols": [
+          {
+            "literal": "*"
+          },
+          "type_qualifier_list",
+          "pointer"
+        ]
+      },
+      {
+        "name": "type_qualifier_list",
+        "symbols": ["type_qualifier"]
+      },
+      {
+        "name": "type_qualifier_list",
+        "symbols": ["type_qualifier_list", "type_qualifier"]
+      },
+      {
+        "name": "parameter_type_list",
+        "symbols": ["parameter_list"]
+      },
+      {
+        "name": "parameter_type_list",
+        "symbols": [
+          "parameter_list",
+          {
+            "literal": ","
+          },
+          {
+            "type": "ELLIPSIS"
+          }
+        ]
+      },
+      {
+        "name": "parameter_list",
+        "symbols": ["parameter_declaration"]
+      },
+      {
+        "name": "parameter_list",
+        "symbols": [
+          "parameter_list",
+          {
+            "literal": ","
+          },
+          "parameter_declaration"
+        ]
+      },
+      {
+        "name": "parameter_declaration",
+        "symbols": ["declaration_specifiers", "declarator"]
+      },
+      {
+        "name": "parameter_declaration",
+        "symbols": ["declaration_specifiers", "abstract_declarator"]
+      },
+      {
+        "name": "parameter_declaration",
+        "symbols": ["declaration_specifiers"]
+      },
+      {
+        "name": "identifier_list",
+        "symbols": [
+          {
+            "type": "IDENTIFIER"
+          }
+        ]
+      },
+      {
+        "name": "identifier_list",
+        "symbols": [
+          "identifier_list",
+          {
+            "literal": ","
+          },
+          {
+            "type": "IDENTIFIER"
+          }
+        ]
+      },
+      {
+        "name": "type_name",
+        "symbols": ["specifier_qualifier_list"]
+      },
+      {
+        "name": "type_name",
+        "symbols": ["specifier_qualifier_list", "abstract_declarator"]
+      },
+      {
+        "name": "abstract_declarator",
+        "symbols": ["pointer"]
+      },
+      {
+        "name": "abstract_declarator",
+        "symbols": ["direct_abstract_declarator"]
+      },
+      {
+        "name": "abstract_declarator",
+        "symbols": ["pointer", "direct_abstract_declarator"]
+      },
+      {
+        "name": "direct_abstract_declarator",
+        "symbols": [
+          {
+            "literal": "("
+          },
+          "abstract_declarator",
+          {
+            "literal": ")"
+          }
+        ]
+      },
+      {
+        "name": "direct_abstract_declarator",
+        "symbols": [
+          {
+            "literal": "["
+          },
+          {
+            "literal": "]"
+          }
+        ]
+      },
+      {
+        "name": "direct_abstract_declarator",
+        "symbols": [
+          {
+            "literal": "["
+          },
+          "assignment_expression",
+          {
+            "literal": "]"
+          }
+        ]
+      },
+      {
+        "name": "direct_abstract_declarator",
+        "symbols": [
+          "direct_abstract_declarator",
+          {
+            "literal": "["
+          },
+          {
+            "literal": "]"
+          }
+        ]
+      },
+      {
+        "name": "direct_abstract_declarator",
+        "symbols": [
+          "direct_abstract_declarator",
+          {
+            "literal": "["
+          },
+          "assignment_expression",
+          {
+            "literal": "]"
+          }
+        ]
+      },
+      {
+        "name": "direct_abstract_declarator",
+        "symbols": [
+          {
+            "literal": "["
+          },
+          {
+            "literal": "*"
+          },
+          {
+            "literal": "]"
+          }
+        ]
+      },
+      {
+        "name": "direct_abstract_declarator",
+        "symbols": [
+          "direct_abstract_declarator",
+          {
+            "literal": "["
+          },
+          {
+            "literal": "*"
+          },
+          {
+            "literal": "]"
+          }
+        ]
+      },
+      {
+        "name": "direct_abstract_declarator",
+        "symbols": [
+          {
+            "literal": "("
+          },
+          {
+            "literal": ")"
+          }
+        ]
+      },
+      {
+        "name": "direct_abstract_declarator",
+        "symbols": [
+          {
+            "literal": "("
+          },
+          "parameter_type_list",
+          {
+            "literal": ")"
+          }
+        ]
+      },
+      {
+        "name": "direct_abstract_declarator",
+        "symbols": [
+          "direct_abstract_declarator",
+          {
+            "literal": "("
+          },
+          {
+            "literal": ")"
+          }
+        ]
+      },
+      {
+        "name": "direct_abstract_declarator",
+        "symbols": [
+          "direct_abstract_declarator",
+          {
+            "literal": "("
+          },
+          "parameter_type_list",
+          {
+            "literal": ")"
+          }
+        ]
+      },
+      {
+        "name": "initializer",
+        "symbols": ["assignment_expression"]
+      },
+      {
+        "name": "initializer",
+        "symbols": [
+          {
+            "literal": "{"
+          },
+          "initializer_list",
+          {
+            "literal": "}"
+          }
+        ]
+      },
+      {
+        "name": "initializer",
+        "symbols": [
+          {
+            "literal": "{"
+          },
+          "initializer_list",
+          {
+            "literal": ","
+          },
+          {
+            "literal": "}"
+          }
+        ]
+      },
+      {
+        "name": "initializer_list",
+        "symbols": ["initializer"]
+      },
+      {
+        "name": "initializer_list",
+        "symbols": ["designation", "initializer"]
+      },
+      {
+        "name": "initializer_list",
+        "symbols": [
+          "initializer_list",
+          {
+            "literal": ","
+          },
+          "initializer"
+        ]
+      },
+      {
+        "name": "initializer_list",
+        "symbols": [
+          "initializer_list",
+          {
+            "literal": ","
+          },
+          "designation",
+          "initializer"
+        ]
+      },
+      {
+        "name": "designation",
+        "symbols": [
+          "designator_list",
+          {
+            "literal": "="
+          }
+        ]
+      },
+      {
+        "name": "designator_list",
+        "symbols": ["designator"]
+      },
+      {
+        "name": "designator_list",
+        "symbols": ["designator_list", "designator"]
+      },
+      {
+        "name": "designator",
+        "symbols": [
+          {
+            "literal": "["
+          },
+          "constant_expression",
+          {
+            "literal": "]"
+          }
+        ]
+      },
+      {
+        "name": "designator",
+        "symbols": [
+          {
+            "literal": "."
+          },
+          {
+            "type": "IDENTIFIER"
+          }
+        ]
+      },
+      {
+        "name": "statement",
+        "symbols": ["labeled_statement"]
+      },
+      {
+        "name": "statement",
+        "symbols": ["compound_statement"]
+      },
+      {
+        "name": "statement",
+        "symbols": ["expression_statement"]
+      },
+      {
+        "name": "statement",
+        "symbols": ["selection_statement"]
+      },
+      {
+        "name": "statement",
+        "symbols": ["iteration_statement"]
+      },
+      {
+        "name": "statement",
+        "symbols": ["jump_statement"]
+      },
+      {
+        "name": "labeled_statement",
+        "symbols": [
+          {
+            "type": "IDENTIFIER"
+          },
+          {
+            "literal": ":"
+          },
+          "statement"
+        ]
+      },
+      {
+        "name": "labeled_statement",
+        "symbols": [
+          {
+            "type": "CASE"
+          },
+          "constant_expression",
+          {
+            "literal": ":"
+          },
+          "statement"
+        ]
+      },
+      {
+        "name": "labeled_statement",
+        "symbols": [
+          {
+            "type": "DEFAULT"
+          },
+          {
+            "literal": ":"
+          },
+          "statement"
+        ]
+      },
+      {
+        "name": "compound_statement",
+        "symbols": [
+          {
+            "literal": "{"
+          },
+          {
+            "literal": "}"
+          }
+        ]
+      },
+      {
+        "name": "compound_statement",
+        "symbols": [
+          {
+            "literal": "{"
+          },
+          "block_item_list",
+          {
+            "literal": "}"
+          }
+        ]
+      },
+      {
+        "name": "block_item_list",
+        "symbols": ["block_item"]
+      },
+      {
+        "name": "block_item_list",
+        "symbols": ["block_item_list", "block_item"]
+      },
+      {
+        "name": "block_item",
+        "symbols": ["declaration"]
+      },
+      {
+        "name": "block_item",
+        "symbols": ["statement"]
+      },
+      {
+        "name": "expression_statement",
+        "symbols": [
+          {
+            "literal": ";"
+          }
+        ]
+      },
+      {
+        "name": "expression_statement",
+        "symbols": [
+          "expression",
+          {
+            "literal": ";"
+          }
+        ]
+      },
+      {
+        "name": "selection_statement",
+        "symbols": [
+          {
+            "type": "IF"
+          },
+          {
+            "literal": "("
+          },
+          "expression",
+          {
+            "literal": ")"
+          },
+          "statement"
+        ]
+      },
+      {
+        "name": "selection_statement",
+        "symbols": [
+          {
+            "type": "IF"
+          },
+          {
+            "literal": "("
+          },
+          "expression",
+          {
+            "literal": ")"
+          },
+          "statement",
+          {
+            "type": "ELSE"
+          },
+          "statement"
+        ]
+      },
+      {
+        "name": "selection_statement",
+        "symbols": [
+          {
+            "type": "SWITCH"
+          },
+          {
+            "literal": "("
+          },
+          "expression",
+          {
+            "literal": ")"
+          },
+          "statement"
+        ]
+      },
+      {
+        "name": "iteration_statement",
+        "symbols": [
+          {
+            "type": "WHILE"
+          },
+          {
+            "literal": "("
+          },
+          "expression",
+          {
+            "literal": ")"
+          },
+          "statement"
+        ]
+      },
+      {
+        "name": "iteration_statement",
+        "symbols": [
+          {
+            "type": "DO"
+          },
+          "statement",
+          {
+            "type": "WHILE"
+          },
+          {
+            "literal": "("
+          },
+          "expression",
+          {
+            "literal": ")"
+          },
+          {
+            "literal": ";"
+          }
+        ]
+      },
+      {
+        "name": "iteration_statement",
+        "symbols": [
+          {
+            "type": "FOR"
+          },
+          {
+            "literal": "("
+          },
+          "expression_statement",
+          "expression_statement",
+          {
+            "literal": ")"
+          },
+          "statement"
+        ]
+      },
+      {
+        "name": "iteration_statement",
+        "symbols": [
+          {
+            "type": "FOR"
+          },
+          {
+            "literal": "("
+          },
+          "expression_statement",
+          "expression_statement",
+          "expression",
+          {
+            "literal": ")"
+          },
+          "statement"
+        ]
+      },
+      {
+        "name": "iteration_statement",
+        "symbols": [
+          {
+            "type": "FOR"
+          },
+          {
+            "literal": "("
+          },
+          "declaration",
+          "expression_statement",
+          {
+            "literal": ")"
+          },
+          "statement"
+        ]
+      },
+      {
+        "name": "iteration_statement",
+        "symbols": [
+          {
+            "type": "FOR"
+          },
+          {
+            "literal": "("
+          },
+          "declaration",
+          "expression_statement",
+          "expression",
+          {
+            "literal": ")"
+          },
+          "statement"
+        ]
+      },
+      {
+        "name": "jump_statement",
+        "symbols": [
+          {
+            "type": "GOTO"
+          },
+          {
+            "type": "IDENTIFIER"
+          },
+          {
+            "literal": ";"
+          }
+        ]
+      },
+      {
+        "name": "jump_statement",
+        "symbols": [
+          {
+            "type": "CONTINUE"
+          },
+          {
+            "literal": ";"
+          }
+        ]
+      },
+      {
+        "name": "jump_statement",
+        "symbols": [
+          {
+            "type": "BREAK"
+          },
+          {
+            "literal": ";"
+          }
+        ]
+      },
+      {
+        "name": "jump_statement",
+        "symbols": [
+          {
+            "type": "RETURN"
+          },
+          {
+            "literal": ";"
+          }
+        ]
+      },
+      {
+        "name": "jump_statement",
+        "symbols": [
+          {
+            "type": "RETURN"
+          },
+          "expression",
+          {
+            "literal": ";"
+          }
+        ]
+      },
+      {
+        "name": "translation_unit",
+        "symbols": ["external_declaration"]
+      },
+      {
+        "name": "translation_unit",
+        "symbols": ["translation_unit", "external_declaration"]
+      },
+      {
+        "name": "external_declaration",
+        "symbols": ["function_definition"]
+      },
+      {
+        "name": "external_declaration",
+        "symbols": ["declaration"]
+      },
+      {
+        "name": "function_definition",
+        "symbols": [
+          "declaration_specifiers",
+          "declarator",
+          "declaration_list",
+          "compound_statement"
+        ]
+      },
+      {
+        "name": "function_definition",
+        "symbols": [
+          "declaration_specifiers",
+          "declarator",
+          "compound_statement"
+        ]
+      },
+      {
+        "name": "declaration_list",
+        "symbols": ["declaration"]
+      },
+      {
+        "name": "declaration_list",
+        "symbols": ["declaration_list", "declaration"]
+      }
+    ],
+    "ParserStart": "translation_unit"
+  }
+}

@@ -1,35 +1,68 @@
-import ts from "typescript";
-import { Ast } from "../ide/panels/ast-panel";
+import {
+  createSourceFile,
+  SyntaxKind,
+  isToken,
+  SourceFile,
+  Node,
+  ScriptTarget,
+} from "typescript";
+import codeRangeComputer from "./parser";
+import { Ast } from "./parser";
 
 class TypeScriptParser {
+  #codeRangeComputer: codeRangeComputer;
+
+  constructor() {
+    this.#codeRangeComputer = new codeRangeComputer("");
+  }
+
   parse(program: string) {
-    const src = ts.createSourceFile(
+    const src = createSourceFile(
       "this-program.ts",
       program,
-      ts.ScriptTarget.Latest
+      ScriptTarget.Latest
     );
+    this.#codeRangeComputer = new codeRangeComputer(program);
+    // Remove EndOfFileToken
     return this.postprocessSourceFile(src);
   }
 
-  postprocessSourceFile(src: ts.SourceFile): Ast {
+  postprocessSourceFile(src: SourceFile): Ast {
     return this.postprocessAst(src, src);
   }
 
-  postprocessAst(u: ts.Node, src: ts.SourceFile) {
-    const kind = ts.SyntaxKind[u.kind];
-    if (ts.isToken(u)) {
-      let { line, character: col } = src.getLineAndCharacterOfPosition(
-        u.pos + 1
-      );
-      line++;
-      col++; // positions are a bit off???
-      return { type: kind, text: u.getText(src), line, col, _ts: u };
+  postprocessAst(u: Node, src: SourceFile) {
+    const kind = SyntaxKind[u.kind];
+    if (isToken(u)) {
+      return {
+        type: kind,
+        text: u.getText(src),
+        range: this.getRange(u),
+        _ts: u,
+        children: null,
+      };
     } else {
-      const children = u
+      const children: any = u
         .getChildren(src)
         .map((s) => this.postprocessAst(s, src));
-      return Object.assign(children, { type: kind, _ts: u });
+      return {
+        type: kind,
+        _ts: u,
+        range: this.getRange(u),
+        children,
+      };
     }
+  }
+
+  getRange(u: Node) {
+    const start = this.#codeRangeComputer.getNumberAndColumnFromPos(u.pos);
+    const end = this.#codeRangeComputer.getNumberAndColumnFromPos(u.end);
+    return {
+      startLineNumber: start.lineNumber,
+      startColumn: start.column,
+      endLineNumber: end.lineNumber,
+      endColumn: end.column,
+    };
   }
 }
 

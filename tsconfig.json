@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": "./src",
     "target": "es2019",
     "module": "esnext",
     "esModuleInterop": true,
@@ -11,10 +12,15 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "react",
-    "noFallthroughCasesInSwitch": true,
-    "strict": false
+    "strict": false,
   },
-  "include": ["./src"],
-  "typeRoots": ["./node_modules/@types"],
-  "exclude": ["node_modules", "dist"]
+  "typeRoots": [
+    "node_modules/@types",
+    "./src/types"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "data"
+  ]
 }

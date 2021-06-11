@@ -139,7 +139,6 @@ export class HMatcher<VData = any> {
     pattern = loadPattern(serializePattern(pattern));
 
     const { definitions, firstOnly, unreflexive } = pattern;
-    console.log(serializePattern(pattern));
 
     if (!definitions || !definitions.length) {
       throw new Error("Cannot resolve match without definitions");

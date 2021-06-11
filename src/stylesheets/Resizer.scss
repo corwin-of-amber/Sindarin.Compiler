@@ -1,0 +1,17 @@
+.resizer {
+  background     : rgba(180, 180, 180, 0.8);
+  opacity        : 0.5;
+  z-index        : 1;
+  box-sizing     : border-box;
+  background-clip: padding-box;
+  width          : 11px;
+  margin         : 0 -5px;
+  border-left    : 5px solid hsla(0, 0%, 100%, 0);
+  border-right   : 5px solid hsla(0, 0%, 100%, 0);
+}
+
+.resizer:hover {
+  border-left : 5px solid hsla(0, 0%, 80%, 0.3);
+  border-right: 5px solid hsla(0, 0%, 80%, 0.3);
+  transition  : all 1s ease;
+}

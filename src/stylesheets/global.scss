@@ -1,0 +1,36 @@
+html,
+body,
+#app {
+  height             : 100%;
+  width              : 100%;
+  margin             : 0;
+  overflow           : hidden;
+  overscroll-behavior: none;
+}
+
+*:focus {
+  outline: none;
+}
+
+#ide {
+  height        : 100%;
+  display       : flex;
+  flex-direction: column;
+  align-items   : stretch;
+
+  #panel-wrapper {
+    height         : 100%;
+    display        : flex;
+    flex-direction : row;
+    align-items    : stretch;
+    justify-content: space-between;
+
+    .panel {
+      position : relative;
+      width    : 33.33%;
+      flex-grow: 1;
+      height   : 100%;
+      overflow : auto;
+    }
+  }
+}

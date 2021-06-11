@@ -16,10 +16,15 @@ interface Edge {
   target: Vertex;
 }
 
-/*
-An internal object for pattern definition
-Useful to transfer context of Route pattern matching in between vertex patterns
- */
+type LabelPat =
+  | SyntaxToken
+  | SyntaxToken[]
+  | Set<SyntaxToken>
+  | RegExp
+  | LabelPred;
+type LabelPred = (l: string) => boolean;
+type ObjectWithLabel = (obj: { label: string }) => boolean;
+
 interface PatternDefinitionPayload {
   vertexLabelPat?: LabelPat; // Pattern for vertex label matching
   visited?: Set<string>; // Visited nodes by `getRouteKey`
@@ -57,12 +62,3 @@ interface PatternDefinition {
   excluding?: LabelPat; // Exclude labels (don't go throw them, important with RTC)
   vertexLabelPat?: LabelPat; // Filter for vertices label (in addition to edge matching)
 }
-
-type LabelPat =
-  | SyntaxToken
-  | SyntaxToken[]
-  | Set<SyntaxToken>
-  | RegExp
-  | LabelPred;
-type LabelPred = (l: string) => boolean;
-type ObjectWithLabel = (obj: { label: string }) => boolean;

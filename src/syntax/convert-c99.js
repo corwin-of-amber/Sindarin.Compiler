@@ -1,8 +1,8 @@
-const fs = require("fs");
+import fs from "fs";
 
-const IDENTIFIER = /[_a-zA-Z][_a-zA-Z0-9]*/,
-  KEYWORDS = {},
-  OPERATORS = {};
+const IDENTIFIER = /[_a-zA-Z][_a-zA-Z0-9]*/;
+const KEYWORDS = {};
+const OPERATORS = {};
 
 const GRAMMAR = {
   Lexer: undefined,
@@ -17,7 +17,7 @@ function matchExact(s, re) {
 function importFlex(lfile) {
   const txt = fs.readFileSync(lfile, "utf-8");
 
-  for (let mo of txt.matchAll(/"([^\n"]*)?".*return\((.*?)\)/g)) {
+  for (const mo of txt.matchAll(/"([^\n"]*)?".*return\((.*?)\)/g)) {
     if (matchExact(mo[1], IDENTIFIER)) {
       KEYWORDS[mo[2]] = mo[1];
     } else if (!["CONSTANT", "STRING_LITERAL"].includes(mo[2])) {
@@ -33,8 +33,8 @@ function importBison(yfile) {
 
   function el(spec) {
     if (
-      KEYWORDS.hasOwnProperty(spec) ||
-      OPERATORS.hasOwnProperty(spec) ||
+      Object.prototype.hasOwnProperty.call(KEYWORDS, spec) ||
+      Object.prototype.hasOwnProperty.call(OPERATORS, spec) ||
       SPECIAL.includes(spec)
     ) {
       return { type: spec };
@@ -45,8 +45,8 @@ function importBison(yfile) {
     }
   }
 
-  for (let mo of txt.matchAll(/\n([a-z_]+)\s*:\s*([^]*?)\s*;\n/g)) {
-    for (let prod of mo[2].split(/\s*[|]\s*/)) {
+  for (const mo of txt.matchAll(/\n([a-z_]+)\s*:\s*([^]*?)\s*;\n/g)) {
+    for (const prod of mo[2].split(/\s*[|]\s*/)) {
       GRAMMAR.ParserRules.push({
         name: mo[1],
         symbols: prod.split(/\s+/).map(el),
@@ -55,12 +55,10 @@ function importBison(yfile) {
   }
 }
 
-if (module.id === ".") {
-  importFlex("src/assets/c99.l");
-  importBison("src/assets/c99.y");
+importFlex("src/assets/c99.l");
+importBison("src/assets/c99.y");
 
-  fs.writeFileSync(
-    "src/syntax/c99.json",
-    JSON.stringify({ OPERATORS, KEYWORDS, GRAMMAR })
-  );
-}
+fs.writeFileSync(
+  "src/syntax/c99.json",
+  JSON.stringify({ OPERATORS, KEYWORDS, GRAMMAR })
+);

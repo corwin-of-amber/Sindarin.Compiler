@@ -109,17 +109,15 @@ export function resolveLexicalScope<VData>(
     return false;
   }
 
-  const pattern: RoutePatternDefinition = _getClosestScopeRouteDefinitionForVertex(
-    vertex,
-    {
+  const pattern: RoutePatternDefinition =
+    _getClosestScopeRouteDefinitionForVertex(vertex, {
       // For each scope, find the variables/parameters declared (in this scope only)
       labelPred: ["VariableDeclaration", "Parameter"],
       through: "incoming",
       modifier: "rtc",
       excluding: [...Syntax.SCOPES, DEFINITION_LABEL],
       vertexLabelPat: label,
-    }
-  );
+    });
 
   m.resolvePatternDefinitions(pattern, (route) => {
     const [use, ...rest] = route;
@@ -140,6 +138,7 @@ export function resolveLexicalScope<VData>(
       return;
     }
 
+    // @ts-ignore
     resultPeg.add([{ label: DEFINITION_LABEL, sources: [use], target: def }]);
   });
 

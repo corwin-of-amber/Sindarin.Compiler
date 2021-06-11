@@ -1,0 +1,17 @@
+#toolbar {
+  display        : flex;
+  flex-direction : row;
+  justify-content: space-between;
+  align-items    : center;
+  width          : 100%;
+  padding        : 5px;
+  border-bottom  : 1px solid rgb(180, 180, 180);
+}
+
+select {
+  margin-left: 5px;
+}
+
+.widget {
+  margin: 5px 20px;
+}

@@ -1,4 +1,3 @@
-import assert from "assert";
 import { isScopeName } from "./semantics";
 
 const FLAG_MAP = {
@@ -18,7 +17,7 @@ const KNOWN_FUNCTIONS = {
 
 export function loadPattern(patternString: string): RoutePatternDefinition {
   const routeSplit = patternString.split("||");
-  assert(routeSplit.length === 2);
+  console.assert(routeSplit.length === 2);
 
   const flagValues = routeSplit[0].split("-").reduce(
     (pv, cv) => {
@@ -45,7 +44,7 @@ export function loadPattern(patternString: string): RoutePatternDefinition {
 
 function loadDefinition(definitionString: string): PatternDefinition {
   const defSplit = definitionString.split(" ");
-  assert(defSplit.length === 4);
+  console.assert(defSplit.length === 4);
 
   const [labelPred, vertexPred, arrowPart, modifiers] = defSplit;
   const arrow = arrowPart.substr(0, 2);
@@ -110,7 +109,7 @@ function* _serializeDefinition(def: PatternDefinition) {
   } = def;
 
   if (typeof labelPred === "function") {
-    assert(KNOWN_FUNCTIONS[labelPred.name]);
+    console.assert(KNOWN_FUNCTIONS[labelPred.name]);
     yield labelPred.name;
   } else {
     yield `${JSON.stringify(labelPred)}`;

@@ -1,0 +1,22 @@
+#ast-panel {
+  font-family: Courier, monospace;
+  font-size  : 2vh;
+
+  .hoverable:hover {
+    cursor: pointer;
+  }
+
+  .node {
+    border       : 1px solid #888;
+    border-radius: 3px;
+    padding      : 2px;
+  }
+
+  .node-wrapper {
+    margin: 1em 0;
+  }
+
+  #parse-error {
+    margin-left: 5px;
+  }
+}

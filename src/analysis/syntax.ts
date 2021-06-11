@@ -1,4 +1,4 @@
-import * as SetOps from "../infra/setops";
+import * as SetOps from "infra/setops";
 
 export const ALL = new Set<TypeScriptSyntaxToken>([
   "ClassDeclaration",
