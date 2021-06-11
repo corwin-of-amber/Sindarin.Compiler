@@ -242,8 +242,10 @@ class AndersenAnalyis<VData> implements PointsToAnalysis<VData> {
 
     // Propagate constraints based on assignments
     // TODO: combine into RTC modifier somehow...
-    while (true) {
-      const changed = false;
+    let changed = true;
+
+    while (changed) {
+      changed = false;
 
       ptaMatcher.resolvePatternDefinitions(
         {
@@ -269,13 +271,10 @@ class AndersenAnalyis<VData> implements PointsToAnalysis<VData> {
           ],
         },
         ([src, _, target]) => {
-          this._link(LINK_TYPES.SOLVED, src, target);
+          const edgeAdded = this._link(LINK_TYPES.SOLVED, src, target);
+          changed = changed || edgeAdded;
         }
       );
-
-      if (!changed) {
-        break;
-      }
     }
 
     return this.peg;
@@ -506,8 +505,8 @@ class AndersenAnalyis<VData> implements PointsToAnalysis<VData> {
     return { top: null, bottom: vertex, type: LINK_TYPES.INSTANTIATION };
   }
 
-  private _link(type: string, source, target: Vertex) {
-    // TODO: get rid of this
+  private _link(type: string, source, target: Vertex): boolean {
+    // Dedupe adding same link twice
     if (
       this.peg.edges.some(
         (e) =>
@@ -516,12 +515,13 @@ class AndersenAnalyis<VData> implements PointsToAnalysis<VData> {
           e.sources.indexOf(source) !== -1
       )
     ) {
-      return;
+      return false;
     }
 
     this.peg.add([
       new Hypergraph.Edge(type, [source], target as Hypergraph.Vertex),
     ]);
+    return true;
   }
 }
 

@@ -34,20 +34,31 @@ interface PatternDefinitionPayload {
   unreflexive?: boolean;
 }
 
+/*
+The main object for the Pattern Definition API
+It contains options to modify the matching process (firstOnly, unreflexive)
+Also contains the array of definitions - which result the in the vertices returned in the matched Route
+ */
 interface RoutePatternDefinition {
   definitions?: PatternDefinition[];
   firstOnly?: boolean; // Get only first route (per stating-set element)
-  unreflexive?: boolean;
+  unreflexive?: boolean; // If true - don't match a vertex with itself
 }
 
+/*
+The basic block of pattern matching
+It matches a single vertex
+ */
 interface PatternDefinition {
-  labelPred?: LabelPat; // Label matcher
+  // Options to find a vertex to match
   vertex?: { id: VertexId; label: string }; // For first definition only!
+  labelPred?: LabelPat; // Label matcher (against an edge)
   index?: number; // Child vertex resolution
 
+  // Matching modifiers - change the way we match
   through?: "incoming" | "outgoing"; // Traversal direction
-  resolve?: "sources" | "targets"; // Resolution node direction (defaults to sources)
+  resolve?: "sources" | "targets"; // Resolution node direction (defaults to sources) - because we initially match edges
   modifier?: "rtc"; // Traversal type
-  excluding?: LabelPat; // Exclude labels
-  vertexLabelPat?: LabelPat; // Filter for vertices label
+  excluding?: LabelPat; // Exclude labels (don't go throw them, important with RTC)
+  vertexLabelPat?: LabelPat; // Filter for vertices label (in addition to edge matching)
 }
