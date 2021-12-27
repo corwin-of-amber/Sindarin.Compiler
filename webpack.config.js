@@ -4,9 +4,18 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
+    mode: 'development',
     entry: ['./src/index.tsx'],
     output: {
         path: path.resolve(__dirname, "dist")
+    },
+    node: {
+        __filename: "mock",
+        __dirname: true
+    },
+    externals: {
+        os: 'commonjs2 os', 'perf_hooks': 'commonjs2 perf_hooks',
+        fs: 'commonjs2 fs'
     },
     stats: {
         errorDetails: true,

@@ -12,7 +12,8 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "react",
-    "strict": false,
+    "noFallthroughCasesInSwitch": true,
+    "strict": false
   },
   "typeRoots": [
     "node_modules/@types",
@@ -21,6 +22,7 @@
   "exclude": [
     "node_modules",
     "dist",
-    "data"
+    "data",
+    "**/convert-c99.js"
   ]
 }
